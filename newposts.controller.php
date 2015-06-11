@@ -8,19 +8,102 @@
 class newpostsController extends newposts 
 {
 
-	function sendMessages($content, $mail_content, $obj, $sender, $config) 
+	/**
+	 * @brief 설정된 시간 외에 알림들을 리포트 형식으로 예약 발송
+	 **/
+	function sendReservedReport($content, $config, $sender)
 	{
-		// get Phone# & email address accoring to category admin from newposts_admins table
-		
-		$args->category_srl = $obj->category_srl;
-		$output = executeQuery("newposts.getAdminInfo", $args);
-
 		$oTextmessageController = &getController('textmessage');
 		$oNewpostsModel = &getModel('newposts');
 
-		if (in_array($config->sending_method,array('1','2'))&&$oTextmessageController) 
+		$args = new stdClass();
+		$extra_vars = new stdClass();
+
+		//serialize extra_vars(stdclass 를 db 넣으려면 이렇게해야함)
+		if($config->extra_vars) $extra_vars = unserialize($config->extra_vars);
+
+		$time = date('Ym'); 	// 현재 년도 + 월
+		$today = date('d');		// 오늘 날짜
+		$tomorrow = date('d', strtotime("+1 day")); 	// 내일 날짜
+		$hour = date('H');		// 현재 시간
+		$start = sprintf("%02d", $config->time_start);   	// config에 설정된 시작 시간 
+		$end = sprintf("%02d", $config->time_end);			// config에 설정된 끝나는 시간
+
+		if($hour < $start)
+		{
+			$args->datetime = sprintf("%s%s%s0000", $time, $today, $start);
+		}
+		elseif($hour >= $end)
+		{
+			$args->datetime = sprintf("%s%s%s0000", $time, $tomorrow, $start);
+		}
+
+		// extra_vars 에 regdate 가 있다면 이미 발송된 예약문자가 있다는 뜻이므로
+		// 이미 발송된 예약문자를 extra_vars->group_id 로 취소를 한뒤
+		// 다시 문자 발송
+		if($extra_vars->regdate == $args->datetime)
+		{
+			$extra_vars->msg_count++;
+			if($extra_vars->group_id)
+			{
+				$output = $oTextmessageController->cancelGroupMessages($extra_vars->group_id);
+				if(!$output->toBool()) return $output;
+			}
+		}
+
+		// 문자 내용 처리
+		$args->sender_no = $config->sender_phone;
+		$args->recipient_no = explode(',',$config->admin_phones);
+		$msg_format = "%s 포함한 총 %d 건의 게시글이 등록되었습니다.";
+		$args->content = sprintf($msg_format, substr($content, 0, 50), $extra_vars->msg_count + 1);
+
+		// 문자 전송
+		if(count($args->recipient_no))
+		{
+			debugprint($args);
+			$result = $oTextmessageController->sendMessage($args);
+			debugprint($result);
+			if (!$result->toBool()) return $return;
+		}
+
+		// newposts config 에 extra_vars 업데이트
+		$extra_vars->regdate = $args->datetime;
+		// group_id 설정
+		if($result->variables['group_id']) $extra_vars->group_id = $result->variables['group_id'];
+
+		$args->config_srl = $config->config_srl;
+		$args->extra_vars = serialize($extra_vars);
+		$output = executeQuery('newposts.updateExtraVars', $args);
+		if(!$output->toBool()) return $output;
+	}
+
+	/**
+	 * @brief 트리거를 통해 문자를 발송
+	 **/
+	function sendMessages($content, $mail_content, $obj, $sender, $config) 
+	{
+		$oTextmessageController = &getController('textmessage');
+		$oNewpostsModel = &getModel('newposts');
+		// get Phone# & email address accoring to category admin from newposts_admins table
+		$args->category_srl = $obj->category_srl;
+		$output = executeQuery("newposts.getAdminInfo", $args);
+
+
+		if (in_array($config->sending_method,array('1','2')) && $oTextmessageController) 
 		{
 			$args->sender_no = $config->sender_phone;
+			$args->type = "sms";
+			if($config->sms_method == 2 && mb_strlen($args->content) > 89) $args->type = "lms";
+
+			debugprint($config);
+			// 발송 시간 설정 리포트 예약 발송
+			if(!$config->time_switch)
+			{
+				if($config->reserv_switch == 'on') $this->sendReservedReport($content, $config, $sender);	
+				return;
+			}
+
+			// 분류별 게시판 관리자에게 문자알림
 			if($output->data->cellphone)
 			{
 				$args->recipient_no = explode(',',$output->data->cellphone);
@@ -29,9 +112,10 @@ class newpostsController extends newposts
 				if (!$result->toBool()) return $output;
 			}
 
-			//전체관리자 모드 : 분류에 상관없이 보냄
+			//전체관리자 문자알림 : 분류에 상관없이 보냄
 			$args->recipient_no = explode(',',$config->admin_phones);
 			$args->content = $content;
+
 			if(count($args->recipient_no))
 			{
 				$result = $oTextmessageController->sendMessage($args);
@@ -39,6 +123,7 @@ class newpostsController extends newposts
 			}
 		}
 
+		// 
 		if (in_array($config->sending_method,array('1','3'))) 
 		{
 			if ($config->sender_email)
@@ -84,6 +169,9 @@ class newpostsController extends newposts
 		}
 	}
 
+	/**
+	 * @brief 문자 발송전에 문자내용을 준비
+	 **/
 	function processNewposts(&$config,&$obj,&$sender,&$module_info) 
 	{
 		$oMemberModel = &getModel('member');
@@ -115,44 +203,30 @@ class newpostsController extends newposts
 	function triggerInsertDocument(&$obj) 
 	{
 		$oMemberModel = &getModel('member');
+		$oModel = &getModel('newposts');
 
 		// if module_srl not set, just return with success;
-		if (!$obj->module_srl) 
-		{
-			return;
-		}
+		if (!$obj->module_srl) return;
 
 		// if module_srl is wrong, just return with success
 		$args->module_srl = $obj->module_srl;
 		$output = executeQuery('module.getMidInfo', $args);
-		if (!$output->toBool() || !$output->data) 
-		{
-			return;
-		}
+		if (!$output->toBool() || !$output->data) return;
+
 		$module_info = $output->data;
 		unset($args);
-		if (!$module_info) 
-		{
-			return;
-		}
+		if (!$module_info) return; 
 
 		// check login.
 		$sender = new StdClass();
 		$sender->nick_name = $obj->nick_name;
 		$sender->email_address = $obj->email_address;
 		$logged_info = Context::get('logged_info');
-		if ($logged_info) 
-		{
-			$sender = $logged_info;
-		}
+		if ($logged_info) $sender = $logged_info; 
 
 		// get configuration info. no configuration? just return.
-		$oModel = &getModel('newposts');
 		$config_list = $oModel->getConfigListByModuleSrl($obj->module_srl);
-		if (!$config_list) 
-		{
-			return;
-		}
+		if (!$config_list) return; 
 
 		foreach ($config_list as $key=>$val) 
 		{

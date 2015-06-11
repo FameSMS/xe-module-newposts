@@ -4,8 +4,9 @@
 		<value xml:lang="ko"><![CDATA[[새글알림]
 %browser_title%
 %nick_name%
-%content%]]></value>
-		<value xml:lang="en"><![CDATA[[Notification]\n%browser_title%\n%nick_name\n%content%]]></value>
+%content%
+%article_url%]]></value>
+		<value xml:lang="en"><![CDATA[[Notification]\n%browser_title%\n%nick_name\n%content%\n%article_url%]]></value>
 	</item>
 	<item name="default_mail_content">
 		<value xml:lang="ko"><![CDATA[<p>브라우저제목 : %browser_title%<br />닉네임 : %nick_name%<br />내용 : %content%<br />문서 URL : %article_url%</p>]]></value>
@@ -140,7 +141,7 @@
 		<value xml:lang="en"><![CDATA[General Information]]></value>
 	</item>
 	<item name="multiple_phone_no">
-		<value xml:lang="ko"><![CDATA[콤마(,)로 구분하여 여러개 입력가능]]></value>
+		<value xml:lang="ko"><![CDATA[알림을 받을 관리자 번호를 넣으세요. 콤마(,)로 구분하여 여러개 입력가능]]></value>
 		<value xml:lang="en"><![CDATA[You can enter many phone numbers by inserting commas(,).]]></value>
 	</item>
 	<item name="multiple_email">

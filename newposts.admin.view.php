@@ -29,17 +29,18 @@ class newpostsAdminView extends newposts
 		$config_list = array();
 		$args->page = Context::get('page');
 		$output = executeQueryArray('newposts.getConfigList', $args);
-		if ($output->toBool() && $output->data) 
+		debugprint($output);
+		if (!$output->toBool()) return $output; 
+		
+		foreach ($output->data as $no => $val) 
 		{
-			foreach ($output->data as $no => $val) 
-			{
-				$val->no = $no;
-				$val->module_info = array();
-				$config_list[$val->config_srl] = $val;
-			}
+			$val->no = $no;
+			$val->module_info = array();
+			$config_list[$val->config_srl] = $val;
 		}
-		Context::set('total_count', $output->total_count);
-		Context::set('total_page', $output->total_page);
+
+		Context::set('total_count', count($output->data));
+		//Context::set('total_page', $output->total_page);
 		Context::set('page', $output->page);
 		Context::set('page_navigation', $output->page_navigation);
 
@@ -61,6 +62,7 @@ class newpostsAdminView extends newposts
 				}
 			}
 		}
+		debugprint($config_list);
 		Context::set('list', $config_list);
 
 		$oNewpostsModel = &getModel('newposts');
@@ -114,8 +116,7 @@ class newpostsAdminView extends newposts
 		if(!$output->toBool()) return $output;
 
 		$config = $output->data;
-		if(!$config)
-			return new Object(-1, 'Can not read config information');
+		if(!$config) return new Object(-1, 'Can not read config information');
 
 		$extra_vars = unserialize($config->extra_vars);
 		if ($extra_vars) 
