@@ -1,25 +1,22 @@
-<query id="insertConfig" action="insert">
+<query id="updateConfig" action="update">
 	<tables>
 		<table name="newposts_config" />
 	</tables>
 	<columns>
-		<column name="config_srl" var="config_srl" filter="number" notnull="notnull" />
 		<column name="admin_phones" var="admin_phones" />
 		<column name="content" var="content" />
 		<column name="msgtype" var="msgtype" default="SMS" />
 		<column name="admin_emails" var="admin_emails" />
 		<column name="sender_name" var="sender_name" />
-		<column name="sender_phone" var="sender_phone" />
 		<column name="sender_email" var="sender_email" />
 		<column name="mail_content" var="mail_content" />
 		<!-- 1: SMS+Mail, 2: SMS, 3: Email -->
 		<column name="sending_method" var="sending_method" default="1" />
 		<column name="sms_method" var="sms_method" default="1" />
-		<column name="time_switch" var="time_switch" />
-		<column name="time_start" var="time_start" />
-		<column name="time_end" var="time_end" />
-		<column name="reserv_switch" var="reserv_switch" />
 		<column name="extra_vars" var="extra_vars" default="" />
 		<column name="regdate" var="regdate" default="curdate()" />
 	</columns>
+	<conditions>
+		<condition operation="equal" column="config_srl" var="config_srl" notnull="notnull" />
+	</conditions>
 </query>

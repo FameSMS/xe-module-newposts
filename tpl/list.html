@@ -2,14 +2,17 @@
 <include target="header.html" />
 
 <div class="table even easyList">
-	<table>
+	<table class="list_table">
 		<caption>Total {number_format($total_count)}, Page {number_format($page)}/{number_format($total_page)}</caption>
 	<thead>
 		<tr>
-			<th scope="col"><div>{$lang->no}</div></th>
+			<th scope="col"><div>#</div></th>
 			<th scope="col" class=""><div>알림내용(문자)</div></th>
 			<th scope="col" class=""><div>알림내용(메일)</div></th>
+			<th scope="col" class=""><div>알림방법</div></th>
 			<th scope="col" class="quarter_wide"><div>대상모듈</div></th>
+			<th scope="col" class="quarter_wide"><div>문자타입</div></th>
+			<th scope="col" class="quarter_wide"><div>시간설정</div></th>
 			<th scope="col"><div>{$lang->regdate}</div></th>
 			<th scope="col"><div>&nbsp;</div></th>
 			<th scope="col"><div>&nbsp;</div></th>
@@ -19,9 +22,33 @@
 	<tbody>
 		<tr loop="$list=>$no,$val">
 			<td>{$val->no}</td>
-			<td>{htmlspecialchars(substr($val->content, 0, 24))}..</td>
-			<td>{htmlspecialchars(substr($val->mail_content, 0, 50))}..</td>
-			<td>{@$mod_mid=array()}<!--@foreach($val->module_info as $mod)-->{@$mod_mid[]=$mod->mid}<!--@end-->{join(', ', $mod_mid)}</td>
+			<td>{htmlspecialchars(substr($val->content, 0, 20))}..</td>
+			<td>{htmlspecialchars(substr($val->mail_content, 0, 20))}..</td>
+			<td>
+				<div cond="$val->sending_method==1">문자&e-mail</div> 
+				<div cond="$val->sending_method==2">문자</div> 
+				<div cond="$val->sending_method==3">e-mail</div> 
+			</td>
+			<td>{@$mod_mid=array()}
+				<!--@foreach($val->module_info as $mod)-->
+					{@$mod_mid[]=sprintf("<div><a href=%s>%s</a></div>", getUrl('', 'act', '', 'mid', $mod->mid), $mod->mid)}
+				<!--@end-->
+				{join(', ', $mod_mid)}
+			</td>
+			<td>
+				<div cond="$val->sms_method==1" title="알림 내용이 90바이트 이상이면 일부내용이 잘릴수 있습니다.">단문만</div> 
+				<div cond="$val->sms_method==2" title="알림 내용이 90바이트 이상이면 장문으로 변경하여 발송합니다.">장문가능</div> 
+			</td>
+			<td>
+				{@$start = $val->time_start}
+				{@$end = $val->time_end}
+				<div cond="!$val->time_switch && $start && $end">
+					{$start % 12 ? sprintf('%02d', $start % 12) : 12 }:00 {$start >= 12 ? 'pm' : 'am'}	
+					~
+					{$end % 12 ? sprintf('%02d', $end % 12) : 12 }:00 {$end >= 12 ? 'pm' : 'am'}	
+				</div>
+				<div cond="$val->time_switch || !$start || !$end"> 항상 알림</div>
+			</td>
 			<td>{zdate($val->regdate,"Y-m-d")}</td>
 			<td><a href="{getUrl('act','dispNewpostsAdminModify','config_srl',$val->config_srl)}" class="buttonSet buttonSetting"><span>{$lang->cmd_setup}</span></a></td>
 			<td><a href="#delete" class="modalAnchor deleteConfig" data-config-srl="{$val->config_srl}">{$lang->cmd_delete}</a></td>

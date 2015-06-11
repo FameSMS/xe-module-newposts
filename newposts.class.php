@@ -65,6 +65,16 @@ class newposts extends ModuleObject
 		if(!$oDB->isColumnExists("newposts_config","sender_email")) return true;
 		// 2014.06.16 add newposts_config.sender_phones
 		if(!$oDB->isColumnExists("newposts_config","sender_phone")) return true;
+		// 2015. 06. 09 add newposts_config.sms_method
+		if(!$oDB->isColumnExists("newposts_config","sms_method")) return true;
+		// 2015. 06. 09 add newposts_config.time_switch
+		if(!$oDB->isColumnExists("newposts_config","time_switch")) return true;
+		// 2015. 06. 09 add newposts_config.time_start
+		if(!$oDB->isColumnExists("newposts_config","time_start")) return true;
+		// 2015. 06. 09 add newposts_config.time_end
+		if(!$oDB->isColumnExists("newposts_config","time_end")) return true;
+		// 2015. 06. 09 add newposts_config.reserv_switch
+		if(!$oDB->isColumnExists("newposts_config","reserv_switch")) return true;
 
 		return false;
 	}
@@ -92,6 +102,21 @@ class newposts extends ModuleObject
 		}
 		if(!$oDB->isColumnExists("newposts_config","sender_phone")) {
 			$oDB->addColumn("newposts_config", "sender_phone", "varchar", "250");
+		}
+		if(!$oDB->isColumnExists("newposts_config","sms_method")) {
+			$oDB->addColumn("newposts_config", "sms_method", "char", "1");
+		}
+		if(!$oDB->isColumnExists("newposts_config","time_switch")) {
+			$oDB->addColumn("newposts_config", "time_switch", "varchar", "10");
+		}
+		if(!$oDB->isColumnExists("newposts_config","time_start")) {
+			$oDB->addColumn("newposts_config", "time_start", "number", "10");
+		}
+		if(!$oDB->isColumnExists("newposts_config","time_end")) {
+			$oDB->addColumn("newposts_config", "time_end", "number", "10");
+		}
+		if(!$oDB->isColumnExists("newposts_config","reserv_switch")) {
+			$oDB->addColumn("newposts_config", "reserv_switch", "varchar", "10");
 		}
 	}
 
