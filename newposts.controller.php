@@ -31,11 +31,11 @@ class newpostsController extends newposts
 
 		if($hour < $start)
 		{
-			$args->datetime = sprintf("%s%s%s0000", $time, $today, $start);
+			$args->reservdate = sprintf("%s%s%s0000", $time, $today, $start);
 		}
 		elseif($hour >= $end)
 		{
-			$args->datetime = sprintf("%s%s%s0000", $time, $tomorrow, $start);
+			$args->reservdate = sprintf("%s%s%s0000", $time, $tomorrow, $start);
 		}
 
 		// extra_vars 에 regdate 가 있다면 이미 발송된 예약문자가 있다는 뜻이므로
@@ -43,7 +43,7 @@ class newpostsController extends newposts
 		// 다시 문자 발송
 
 		//regdate yyyymmdd 가 datetime 의 yyyymmdd 가 같으면 같은날 발송된것
-		if(substr($extra_vars->regdate, 0, 8) == substr($args->datetime, 0, 8))
+		if(substr($extra_vars->regdate, 0, 8) == substr($args->reservdate, 0, 8))
 		{
 			$extra_vars->msg_count++;
 			if($extra_vars->group_id)
@@ -72,7 +72,7 @@ class newpostsController extends newposts
 		}
 
 		// newposts config 에 extra_vars 업데이트
-		$extra_vars->regdate = $args->datetime;
+		$extra_vars->regdate = $args->reservdate;
 		// group_id 설정
 		if($result->variables['group_id']) $extra_vars->group_id = $result->variables['group_id'];
 
@@ -100,6 +100,7 @@ class newpostsController extends newposts
 			if($config->sms_method == 2 && mb_strlen($args->content) > 89) $args->type = "lms";
 
 			// 발송 시간 설정 리포트 예약 발송
+			if(date_default_timezone_get() != "Asia/Seoul") date_default_timezone_set('Asia/Seoul');
 			$hour = intval(date('H'));		// 현재 시간
 			$start = intval($config->time_start);
 			$end = intval($config->time_end);
