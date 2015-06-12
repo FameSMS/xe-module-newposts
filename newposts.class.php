@@ -63,8 +63,10 @@ class newposts extends ModuleObject
 		if(!$oDB->isColumnExists("newposts_config","sender_name")) return true;
 		// 2012.03.06 add newposts_config.sender_email
 		if(!$oDB->isColumnExists("newposts_config","sender_email")) return true;
+
 		// 2014.06.16 add newposts_config.sender_phones
 		if(!$oDB->isColumnExists("newposts_config","sender_phone")) return true;
+
 		// 2015. 06. 09 add newposts_config.sms_method
 		if(!$oDB->isColumnExists("newposts_config","sms_method")) return true;
 		// 2015. 06. 09 add newposts_config.time_switch
@@ -75,6 +77,11 @@ class newposts extends ModuleObject
 		if(!$oDB->isColumnExists("newposts_config","time_end")) return true;
 		// 2015. 06. 09 add newposts_config.reserv_switch
 		if(!$oDB->isColumnExists("newposts_config","reserv_switch")) return true;
+
+		// 2015. 06. 12 add newposts_config.selected_days
+		if(!$oDB->isColumnExists("newposts_config","selected_days")) return true;
+
+
 
 		return false;
 	}
@@ -117,6 +124,9 @@ class newposts extends ModuleObject
 		}
 		if(!$oDB->isColumnExists("newposts_config","reserv_switch")) {
 			$oDB->addColumn("newposts_config", "reserv_switch", "varchar", "10");
+		}
+		if(!$oDB->isColumnExists("newposts_config","selected_days")) {
+			$oDB->addColumn("newposts_config", "selected_days", "varchar", "30");
 		}
 	}
 

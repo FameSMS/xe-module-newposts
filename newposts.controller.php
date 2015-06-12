@@ -60,9 +60,7 @@ class newpostsController extends newposts
 		// 문자 전송
 		if(count($args->recipient_no))
 		{
-			debugprint($args);
 			$result = $oTextmessageController->sendMessage($args);
-			debugprint($result);
 			if (!$result->toBool()) return $return;
 		}
 
@@ -88,20 +86,30 @@ class newpostsController extends newposts
 		$args->category_srl = $obj->category_srl;
 		$output = executeQuery("newposts.getAdminInfo", $args);
 
-
 		if (in_array($config->sending_method,array('1','2')) && $oTextmessageController) 
 		{
 			$args->sender_no = $config->sender_phone;
 			$args->type = "sms";
 			if($config->sms_method == 2 && mb_strlen($args->content) > 89) $args->type = "lms";
 
-			debugprint($config);
 			// 발송 시간 설정 리포트 예약 발송
-			if(!$config->time_switch)
+			$hour = intval(date('H'));		// 현재 시간
+			$start = intval($config->time_start);
+			$end = intval($config->time_end);
+
+			// 항상 받기 off  리포트예약발송 off  시간이 설정된 시간이 아니면 return 
+			if($config->time_switch != 'on' && $config->reserv_switch != 'on' && ($hour < $start || $hour >= $end))
 			{
-				if($config->reserv_switch == 'on') $this->sendReservedReport($content, $config, $sender);	
 				return;
 			}
+
+			// 리포트예약발송 on 이면서 시간이 알림 받을 시간이 아니면
+			if($config->reserv_switch =='on' && ($hour < $time_start || $hour >= $end))
+			{
+				$this->sendReservedReport($content, $config, $sender);	
+				return;
+			}
+
 
 			// 분류별 게시판 관리자에게 문자알림
 			if($output->data->cellphone)

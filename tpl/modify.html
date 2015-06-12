@@ -2,7 +2,9 @@
 <load target="css/newposts.css" />
 <load target="js/target.js" />
 <load target="js/newposts.js" />
-
+<load target="js/weekline/js/jquery.weekLine.min.js"/>
+<load target="js/weekline/css/cleanslate.css" />
+<load target="js/weekline/css/jquery.weekLine.css" />
 <include target="header.html" />
 
 <form action="./" class="x_form-horizontal" method="post">
@@ -99,6 +101,16 @@
 						라는 알림을 받습니다.
 					</p>
 				</div>
+
+				<div class="x_control-group">
+					<label class="x_control-label">날짜설정</label>
+					<div class="x_controls">
+						<label class="x_inline" for="time_start">
+							<div id="week_cal"> </div>
+							<input type="hidden" name="selected_days" id="selected_days" value="{$config->selected_days}" />
+						</label>
+					</div>
+				</div>		
 			</div>
 	</section>
 

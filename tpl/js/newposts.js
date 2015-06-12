@@ -60,11 +60,6 @@ function appendAtCursor($target, cursor, $value) {
         }
     };
 
-
-
-
-
-
 jQuery(document).ready(function() {
     jQuery("#time_switch").click(function() {
        if (jQuery(this).is(":checked")) { 
@@ -81,9 +76,23 @@ jQuery(document).ready(function() {
 
 	if(jQuery("#time_switch").is(":checked")) 
 	{
-		console.log("checked");
 		jQuery("#time_start").prop("disabled", true);
 		jQuery("#time_end").prop("disabled", true);
 		jQuery("#reserv_switch").prop("disabled", true);
 	}
+
+	var week_cal = jQuery("#week_cal").weekLine({
+						mousedownSel: false,
+						dayLabels: ["일", "월", "화", "수", "목", "금", "토"],
+						onChange: function () {
+								var selected = jQuery(this).weekLine('getSelected', 'indexes');
+								jQuery("#selected_days").val(selected);
+						}
+				 });
+
+	var selected_days = jQuery("#selected_days").val();
+	week_cal.weekLine('setSelected', selected_days);
+	
 });
+
+

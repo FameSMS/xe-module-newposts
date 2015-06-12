@@ -9,8 +9,12 @@
 
 <ul class="x_nav x_nav-tabs">
 	<li class="x_active"|cond="$act=='dispNewpostsAdminList'"> <a href="{getUrl('act','dispNewpostsAdminList')}">목록</a> </li>
+	<li cond="0" class="x_active"|cond="$act=='dispNewpostsAdminInsertTestDocument'"> <a href="{getUrl('act','dispNewpostsAdminInsertTestDocument')}">TEST</a> </li>
 	<li cond="$act=='dispNewpostsAdminInsert'" class="x_active"|cond="$act=='dispNewpostsAdminInsert' || $act=='dispNewpostsAdminModify'">
 		<a href="{getUrl('act','dispNewpostsAdminInsert')}">등록</a>
+	</li>
+	<li cond="$act=='dispNewpostsAdminModify'" class="x_active"|cond="$act=='dispNewpostsAdminModify'">
+		<a href="{getUrl('act','dispNewpostsAdminModify')}">수정</a>
 	</li>
 </ul>
 <div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
