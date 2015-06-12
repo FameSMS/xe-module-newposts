@@ -74,11 +74,19 @@ class newpostsAdminController extends newposts
 		// 파라미터에 config_srl 있으면 지우고 다시만들고 없으면 새로 받아오고
 		if ($parm->config_srl) 
 		{
-			// delete existences
 			$args->config_srl = $parm->config_srl;
+
+			$output = executeQuery('newposts.getConfig', $args);
+			debugprint($output);
+			if(!$output->toBool()) return $output;
+			$extra_vars = $output->data->extra_vars;
+			
+			// delete existences
 			$output = executeQuery('newposts.deleteConfig', $args);
+			debugprint($output);
 			if (!$output->toBool()) return $output;
 			$output = executeQuery('newposts.deleteModule', $args);
+			debugprint($output);
 			if (!$output->toBool()) return $output;
 		}
 		else
@@ -99,7 +107,11 @@ class newpostsAdminController extends newposts
 			if (!$output->toBool()) return $output;
 		}
 		// newposts.config 에 insert 하기 
+		if($extra_vars) $parm->extra_vars = $extra_vars;
+
+		debugprint($parm);
 		$output = executeQuery('newposts.insertConfig', $parm);
+		debugprint($output);
 		if (!$output->toBool())	return $output;
 
 		return new Object();

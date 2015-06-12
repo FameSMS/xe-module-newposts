@@ -41,7 +41,9 @@ class newpostsController extends newposts
 		// extra_vars 에 regdate 가 있다면 이미 발송된 예약문자가 있다는 뜻이므로
 		// 이미 발송된 예약문자를 extra_vars->group_id 로 취소를 한뒤
 		// 다시 문자 발송
-		if($extra_vars->regdate == $args->datetime)
+
+		//regdate yyyymmdd 가 datetime 의 yyyymmdd 가 같으면 같은날 발송된것
+		if(substr($extra_vars->regdate, 0, 8) == substr($args->datetime, 0, 8))
 		{
 			$extra_vars->msg_count++;
 			if($extra_vars->group_id)
@@ -49,6 +51,11 @@ class newpostsController extends newposts
 				$output = $oTextmessageController->cancelGroupMessages($extra_vars->group_id);
 				if(!$output->toBool()) return $output;
 			}
+		}
+		else
+		{
+			//다른 날이라면 msg_count 초기화
+			$extra_vars->msg_count = 0;
 		}
 
 		// 문자 내용 처리
