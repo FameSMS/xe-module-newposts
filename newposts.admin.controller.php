@@ -18,7 +18,7 @@ class newpostsAdminController extends newposts
 	 **/
 	function procNewpostsAdminInsert() 
 	{
-		$params = Context::gets('admin_phones','admin_emails', 'sender_phone', 'sender_name','sender_email','content','mail_content','module_srls','msgtype','sending_method', 'sms_method', 'time_switch', 'time_start', 'time_end', 'reserv_switch', 'selected_days');
+		$params = Context::gets('admin_phones','admin_emails', 'sender_phone', 'sender_name','sender_email','content','mail_content','module_srls','msgtype','sending_method', 'sms_method', 'time_switch', 'time_start', 'time_end', 'reserv_switch', 'selected_days', 'day_switch');
 
 		// 모듈 입력을 하지 않앗을 경우 에러메시지 & Redirect
 		if(!$params->module_srls)
@@ -41,7 +41,7 @@ class newpostsAdminController extends newposts
 
 	function procNewpostsAdminModify()
 	{
-		$params = Context::gets('admin_phones','admin_emails','sender_phone','sender_name','sender_email','content','mail_content','module_srls','msgtype','sending_method', 'sms_method', 'time_switch', 'time_start', 'time_end', 'reserv_switch', 'selected_days');
+		$params = Context::gets('admin_phones','admin_emails','sender_phone','sender_name','sender_email','content','mail_content','module_srls','msgtype','sending_method', 'sms_method', 'time_switch', 'time_start', 'time_end', 'reserv_switch', 'selected_days', 'day_switch');
 		$params->config_srl = Context::get('config_srl');
 		// Insert 와 다른점은 이건 Modify 로 Redirect 하고 Insert 는 Insert 로 Redirect
 		// 모듈 입력을 하지 않앗을 경우 에러메시지 & Redirect
@@ -77,16 +77,13 @@ class newpostsAdminController extends newposts
 			$args->config_srl = $parm->config_srl;
 
 			$output = executeQuery('newposts.getConfig', $args);
-			debugprint($output);
 			if(!$output->toBool()) return $output;
 			$extra_vars = $output->data->extra_vars;
 			
 			// delete existences
 			$output = executeQuery('newposts.deleteConfig', $args);
-			debugprint($output);
 			if (!$output->toBool()) return $output;
 			$output = executeQuery('newposts.deleteModule', $args);
-			debugprint($output);
 			if (!$output->toBool()) return $output;
 		}
 		else
@@ -109,9 +106,7 @@ class newpostsAdminController extends newposts
 		// newposts.config 에 insert 하기 
 		if($extra_vars) $parm->extra_vars = $extra_vars;
 
-		debugprint($parm);
 		$output = executeQuery('newposts.insertConfig', $parm);
-		debugprint($output);
 		if (!$output->toBool())	return $output;
 
 		return new Object();

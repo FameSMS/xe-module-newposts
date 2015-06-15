@@ -110,6 +110,9 @@
 							<div id="week_cal"> </div>
 							<input type="hidden" name="selected_days" id="selected_days" value="{$config->selected_days}" />
 						</label>
+						<label class="x_inline" for="day_switch">
+							<input type="checkbox" name="day_switch" id="day_switch" checked|cond="$config->day_switch=='on'" />항상 받기
+						</label>
 					</div>
 				</div>				
 		</section>

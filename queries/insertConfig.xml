@@ -16,7 +16,9 @@
 		<column name="sending_method" var="sending_method" default="1" />
 		<column name="sms_method" var="sms_method" default="1" />
 		<column name="time_switch" var="time_switch" />
+		<column name="day_switch" var="day_switch" />
 		<column name="time_start" var="time_start" />
+		<column name="day_start" var="day_start" />
 		<column name="time_end" var="time_end" />
 		<column name="reserv_switch" var="reserv_switch" />
 		<column name="selected_days" var="selected_days" />

@@ -81,6 +81,8 @@ class newposts extends ModuleObject
 		// 2015. 06. 12 add newposts_config.selected_days
 		if(!$oDB->isColumnExists("newposts_config","selected_days")) return true;
 
+		// 2015. 06. 15 add newposts_config.day_switch
+		if(!$oDB->isColumnExists("newposts_config","day_switch")) return true;
 
 
 		return false;
@@ -127,6 +129,9 @@ class newposts extends ModuleObject
 		}
 		if(!$oDB->isColumnExists("newposts_config","selected_days")) {
 			$oDB->addColumn("newposts_config", "selected_days", "varchar", "30");
+		}
+		if(!$oDB->isColumnExists("newposts_config","day_switch")) {
+			$oDB->addColumn("newposts_config", "day_switch", "varchar", "10");
 		}
 	}
 
