@@ -29,7 +29,6 @@ class newpostsAdminView extends newposts
 		$config_list = array();
 		$args->page = Context::get('page');
 		$output = executeQueryArray('newposts.getConfigList', $args);
-		debugprint($output);
 		if (!$output->toBool()) return $output; 
 		
 		foreach ($output->data as $no => $val) 
@@ -62,7 +61,6 @@ class newpostsAdminView extends newposts
 				}
 			}
 		}
-		debugprint($config_list);
 		Context::set('list', $config_list);
 
 		$oNewpostsModel = &getModel('newposts');
@@ -289,6 +287,16 @@ class newpostsAdminView extends newposts
 			$i++;
 		}
 		$array = $sortedData;	
+	}
+
+	function dispnewpostsAdminInsertTestDocument()
+	{
+		$oBoardController = &getController('board');
+		$output = $oBoardController->procBoardInsertDocument();
+		debugprint($output);
+
+		$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminList');
+		$this->setRedirectUrl($redirectUrl);
 	}
 }
 

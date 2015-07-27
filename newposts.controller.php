@@ -31,17 +31,19 @@ class newpostsController extends newposts
 
 		if($hour < $start)
 		{
-			$args->datetime = sprintf("%s%s%s0000", $time, $today, $start);
+			$args->reservdate = sprintf("%s%s%s0000", $time, $today, $start);
 		}
 		elseif($hour >= $end)
 		{
-			$args->datetime = sprintf("%s%s%s0000", $time, $tomorrow, $start);
+			$args->reservdate = sprintf("%s%s%s0000", $time, $tomorrow, $start);
 		}
 
 		// extra_vars 에 regdate 가 있다면 이미 발송된 예약문자가 있다는 뜻이므로
 		// 이미 발송된 예약문자를 extra_vars->group_id 로 취소를 한뒤
 		// 다시 문자 발송
-		if($extra_vars->regdate == $args->datetime)
+
+		//regdate yyyymmdd 가 datetime 의 yyyymmdd 가 같으면 같은날 발송된것
+		if(substr($extra_vars->regdate, 0, 8) == substr($args->reservdate, 0, 8))
 		{
 			$extra_vars->msg_count++;
 			if($extra_vars->group_id)
@@ -49,6 +51,11 @@ class newpostsController extends newposts
 				$output = $oTextmessageController->cancelGroupMessages($extra_vars->group_id);
 				if(!$output->toBool()) return $output;
 			}
+		}
+		else
+		{
+			//다른 날이라면 msg_count 초기화
+			$extra_vars->msg_count = 0;
 		}
 
 		// 문자 내용 처리
@@ -60,14 +67,12 @@ class newpostsController extends newposts
 		// 문자 전송
 		if(count($args->recipient_no))
 		{
-			debugprint($args);
 			$result = $oTextmessageController->sendMessage($args);
-			debugprint($result);
 			if (!$result->toBool()) return $return;
 		}
 
 		// newposts config 에 extra_vars 업데이트
-		$extra_vars->regdate = $args->datetime;
+		$extra_vars->regdate = $args->reservdate;
 		// group_id 설정
 		if($result->variables['group_id']) $extra_vars->group_id = $result->variables['group_id'];
 
@@ -88,20 +93,31 @@ class newpostsController extends newposts
 		$args->category_srl = $obj->category_srl;
 		$output = executeQuery("newposts.getAdminInfo", $args);
 
-
 		if (in_array($config->sending_method,array('1','2')) && $oTextmessageController) 
 		{
 			$args->sender_no = $config->sender_phone;
 			$args->type = "sms";
 			if($config->sms_method == 2 && mb_strlen($args->content) > 89) $args->type = "lms";
 
-			debugprint($config);
 			// 발송 시간 설정 리포트 예약 발송
-			if(!$config->time_switch)
+			if(date_default_timezone_get() != "Asia/Seoul") date_default_timezone_set('Asia/Seoul');
+			$hour = intval(date('H'));		// 현재 시간
+			$start = intval($config->time_start);
+			$end = intval($config->time_end);
+
+			// 항상 받기 off  리포트예약발송 off  시간이 설정된 시간이 아니면 return 
+			if($config->time_switch != 'on' && $config->reserv_switch != 'on' && ($hour < $start || $hour >= $end))
 			{
-				if($config->reserv_switch == 'on') $this->sendReservedReport($content, $config, $sender);	
 				return;
 			}
+
+			// 리포트예약발송 on 이면서 시간이 알림 받을 시간이 아니면
+			if($config->reserv_switch =='on' && ($hour < $time_start || $hour >= $end))
+			{
+				$this->sendReservedReport($content, $config, $sender);	
+				return;
+			}
+
 
 			// 분류별 게시판 관리자에게 문자알림
 			if($output->data->cellphone)
