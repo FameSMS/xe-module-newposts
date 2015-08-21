@@ -2,7 +2,7 @@
 /**
  * vi:set sw=4 ts=4 noexpandtab fileencoding=utf8:
  * @class  newpostsController
- * @author wiley@nurigo.net
+ * @author NURIGO (Contact@nurigo.net)
  * @brief  newpostsController
  */
 class newpostsController extends newposts 
@@ -10,6 +10,7 @@ class newpostsController extends newposts
 
 	/**
 	 * @brief 설정된 시간 외에 알림들을 리포트 형식으로 예약 발송
+	 *
 	 **/
 	function sendReservedReport($content, $config, $sender)
 	{
@@ -84,6 +85,7 @@ class newpostsController extends newposts
 
 	/**
 	 * @brief 트리거를 통해 문자를 발송
+	 *
 	 **/
 	function sendMessages($content, $mail_content, $obj, $sender, $config) 
 	{
@@ -187,6 +189,7 @@ class newpostsController extends newposts
 
 	/**
 	 * @brief 문자 발송전에 문자내용을 준비
+	 *
 	 **/
 	function processNewposts(&$config,&$obj,&$sender,&$module_info) 
 	{
@@ -202,7 +205,6 @@ class newpostsController extends newposts
 		// get document info.
 		$oDocumentModel = &getModel('document');
 		$oDocument = $oDocumentModel->getDocument($obj->document_srl);
-		debugPrint('oDocument : ' . serialize($oDocument));
 */
 		$tmp_obj->article_url = getFullUrl('','document_srl', $obj->document_srl);
 		$tmp_content = $this->mergeKeywords($mail_content, $tmp_obj);
@@ -215,6 +217,7 @@ class newpostsController extends newposts
 	/**
 	 * @brief trigger for document insertion.
 	 * @param $obj : document object.
+	 *
 	 **/
 	function triggerInsertDocument(&$obj) 
 	{
@@ -250,4 +253,5 @@ class newpostsController extends newposts
 		}
 	}
 }
-?>
+/* End of file newposts.controller.php */
+/* Location: ./modules/newposts/newposts.controller.php */

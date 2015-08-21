@@ -2,13 +2,17 @@
 /**
  * vi:set sw=4 ts=4 noexpandtab fileencoding=utf8:
  * @class  newpostsAdminView
- * @author wiley(wiley@nurigo.net)
+ * @author NURIGO (Contact@nurigo.net)
  * @brief  newpostsAdminView
  */ 
 class newpostsAdminView extends newposts 
 {
 	var $group_list;
 
+	/**
+	 * @brief initiate
+	 *
+	 **/
 	function init() 
 	{
 		$oMemberModel = &getModel('member');
@@ -23,6 +27,7 @@ class newpostsAdminView extends newposts
 
 	/**
 	 * @brief newposts configuration list.
+	 *
 	 **/
 	function dispNewpostsAdminList() 
 	{
@@ -72,6 +77,7 @@ class newpostsAdminView extends newposts
 
 	/**
 	 * @brief insert newposts configuration info.
+	 *
 	 **/
 	function dispNewpostsAdminInsert() 
 	{
@@ -104,6 +110,7 @@ class newpostsAdminView extends newposts
 
 	/**
 	 * @brief modify newposts configuration.
+	 *
 	 **/
 	function dispNewpostsAdminModify() 
 	{
@@ -140,7 +147,9 @@ class newpostsAdminView extends newposts
 		if(sizeOf($module_srls)!=0)
 		{
 			$config->module_srls = join(',', $module_srls);
-		}else{
+		}
+		else
+		{
 			$config->module_srls = $module_srls[0];
 		}
 
@@ -169,6 +178,10 @@ class newpostsAdminView extends newposts
 		$this->setTemplateFile('modify');
 	}
 
+	/**
+	 * @brief display 분류별 담당자 지정 페이지
+	 *
+	 **/
 	function dispNewpostsAdminSet()
 	{
 		//config 정보 가져오기
@@ -188,7 +201,9 @@ class newpostsAdminView extends newposts
 			{
 				$module_srls[] = $val->module_srl;
 			}
-		}else{
+		}
+		else
+		{
 			$module_srls[] = $output->data->module_srl;
 		}
 		$tmpOutput = array();
@@ -244,7 +259,9 @@ class newpostsAdminView extends newposts
 			if(count($output->data)!=0)
 			{
 				$nextOutput[$module_info->data->module_srl] = $obj;
-			}else{
+			}
+			else
+			{
 				array_splice($nextOutput, $i, 1);
 			}
 		}
@@ -254,7 +271,11 @@ class newpostsAdminView extends newposts
 		Context::set('outputs', $nextOutput);
 		$this->setTemplateFile('set');
 	}
-	// rearrange array : parent board -> child board
+
+	/**
+	 * @brief tool for arranging elements
+	 *
+	 **/
 	function arrangeElement(&$array)
 	{
 		$i = 0;
@@ -288,16 +309,6 @@ class newpostsAdminView extends newposts
 		}
 		$array = $sortedData;	
 	}
-
-	function dispnewpostsAdminInsertTestDocument()
-	{
-		$oBoardController = &getController('board');
-		$output = $oBoardController->procBoardInsertDocument();
-		debugprint($output);
-
-		$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminList');
-		$this->setRedirectUrl($redirectUrl);
-	}
 }
-
-?>
+/* End of file newposts.admin.view.php */
+/* Location: ./modules/newposts/newposts.admin.view.php */

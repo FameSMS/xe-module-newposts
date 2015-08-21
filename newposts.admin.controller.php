@@ -2,7 +2,7 @@
 /**
  * vi:set sw=4 ts=4 noexpandtab fileencoding=utf8:
  * @class  newpostsAdminController
- * @author wiley(wiley@nurigo.net)
+ * @author NURIGO (Contact@nurigo.net)
  * @brief  newpostsAdminController
  */
 class newpostsAdminController extends newposts 
@@ -13,8 +13,10 @@ class newpostsAdminController extends newposts
 	function init() 
 	{
 	}
+
 	/**
 	 * @brief saving config values.
+	 *
 	 **/
 	function procNewpostsAdminInsert() 
 	{
@@ -39,6 +41,10 @@ class newpostsAdminController extends newposts
 		$this->setRedirectUrl($redirectUrl);
 	}
 
+	/**
+	 * @brief modify configs
+	 *
+	 **/
 	function procNewpostsAdminModify()
 	{
 		$params = Context::gets('admin_phones','admin_emails','sender_phone','sender_name','sender_email','content','mail_content','module_srls','msgtype','sending_method', 'sms_method', 'time_switch', 'time_start', 'time_end', 'reserv_switch', 'selected_days');
@@ -49,7 +55,7 @@ class newpostsAdminController extends newposts
 		{
 			$this->setMessage('notify_empty_module');
 			$this->setMessageType('error');
-			$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminModify','config_srl',$params->config_srl);
+			$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminModify', 'config_srl', $params->config_srl);
 			$this->setRedirectUrl($redirectUrl);
 			return;
 		}
@@ -59,11 +65,14 @@ class newpostsAdminController extends newposts
 		if(!$output->toBool()) return $output;
 
 		$this->setMessage('새글알림이 수정되었습니다.');
-		$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminModify','config_srl',$params->config_srl);
+		$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminModify', 'config_srl', $params->config_srl);
 		$this->setRedirectUrl($redirectUrl);
 	}
 
-
+	/**
+	 * @brief process config settings whether create or modify to avoid massive duplicated codes
+	 *
+	 **/
 	function processNewpostsAdmin(&$parm)
 	{
 		//시작하는 시간은 있는데 끝나는 시간이 없는 경우
@@ -77,16 +86,13 @@ class newpostsAdminController extends newposts
 			$args->config_srl = $parm->config_srl;
 
 			$output = executeQuery('newposts.getConfig', $args);
-			debugprint($output);
 			if(!$output->toBool()) return $output;
 			$extra_vars = $output->data->extra_vars;
 			
 			// delete existences
 			$output = executeQuery('newposts.deleteConfig', $args);
-			debugprint($output);
 			if (!$output->toBool()) return $output;
 			$output = executeQuery('newposts.deleteModule', $args);
-			debugprint($output);
 			if (!$output->toBool()) return $output;
 		}
 		else
@@ -109,32 +115,37 @@ class newpostsAdminController extends newposts
 		// newposts.config 에 insert 하기 
 		if($extra_vars) $parm->extra_vars = $extra_vars;
 
-		debugprint($parm);
 		$output = executeQuery('newposts.insertConfig', $parm);
-		debugprint($output);
 		if (!$output->toBool())	return $output;
 
 		return new Object();
 	}
 
+	/**
+	 * @brief delete config
+	 *
+	 **/
 	function procNewpostsAdminDelete() 
 	{
 		$config_srl = Context::get('config_srl');
 		if (!$config_srl) return new Object(-1, 'msg_invalid_request');
 
-		if ($config_srl) 
-		{
-			// delete existences
-			$args->config_srl = $config_srl;
-			$query_id = "newposts.deleteConfig";
-			$output = executeQuery($query_id, $args);
-			$query_id = "newposts.deleteModule";
-			$output = executeQuery($query_id, $args);
-		}
+		// delete existences
+		$args->config_srl = $config_srl;
+		$query_id = "newposts.deleteConfig";
+		$output = executeQuery($query_id, $args);
+		if(!$output->toBool()) return $output;
+		$query_id = "newposts.deleteModule";
+		$output = executeQuery($query_id, $args);
+		if(!$output->toBool()) return $output;
 		$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminList');
 		$this->setRedirectUrl($redirectUrl);
 	}
 
+	/**
+	 * @brief 분류별 담당자 지정
+	 *
+	 **/
 	function procNewpostsAdminSet()
 	{
 		$category_srl = Context::get('category_srl');
@@ -153,4 +164,5 @@ class newpostsAdminController extends newposts
 		$this->setRedirectUrl($redirectUrl);
 	}
 }
-?>
+/* End of file newposts.admin.controller.php */
+/* Location: ./modules/newposts/newposts.admin.controller.php */
