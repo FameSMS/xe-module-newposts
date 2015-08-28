@@ -1,11 +1,9 @@
 <load target="js/list.js" />
-
 <include target="header.html" />
-
 
 <form action="./" method="post">
 	<input type="hidden" name="module" value="newposts" />
-	<input type="hidden" name="act" value="procNewpostsAdminSet" />
+	<input type="hidden" name="act" value="procNewpostsAdminSetCategoryAdmins" />
 	<input type="hidden" name="config_srl" value="{$config_srl}" />
 
 	<section class="section" style="margin-left: 3%;">
@@ -38,7 +36,4 @@
 			<input type="submit" class="x_btn x_btn-primary" value="{$lang->cmd_registration}" accesskey="s" />
 			<a href="{getUrl('act','dispNewpostsAdminList')}" type="button" class="x_btn">{$lang->cmd_list}</a>
 	</div>
-	
-
 </form>
-

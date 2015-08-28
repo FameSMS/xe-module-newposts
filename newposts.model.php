@@ -39,10 +39,9 @@ class newpostsModel extends newposts
 	{
 		if (!$module_srl) return false;
 		$args->module_srl = $module_srl;
-		$output = executeQuery("newposts.getConfigByModuleSrl", $args);
+		$output = executeQueryArray("newposts.getConfigByModuleSrl", $args);
 		if (!$output->toBool() || !$output->data) return false;
 		$config_list = $output->data;
-		if (!is_array($config_list)) $config_list = array($output->data);
 
 		foreach($config_list as $key=>$val)
 		{

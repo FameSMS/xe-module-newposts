@@ -195,6 +195,14 @@
 		<value xml:lang="ko"><![CDATA[대상모듈이 비었습니다.]]></value>
 		<value xml:lang="en"><![CDATA[You need to select at least one module.]]></value>
 	</item>
+	<item name="notify_empty_ending_time">
+		<value xml:lang="ko"><![CDATA[시간 설정에 끝나는 시간이 비었습니다.]]></value>
+		<value xml:lang="en"><![CDATA[There is no ending time.]]></value>
+	</item>
+	<item name="notify_empty_starting_time">
+		<value xml:lang="ko"><![CDATA[시간 설정에 시작하는 시간이 비었습니다.]]></value>
+		<value xml:lang="en"><![CDATA[There is no starting time.]]></value>
+	</item>
 	<item name="cmd_name">
 		<value xml:lang="ko"><![CDATA[이름]]></value>
 		<value xml:lang="en"><![CDATA[Name]]></value>

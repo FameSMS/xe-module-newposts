@@ -10,7 +10,7 @@ class newpostsAdminView extends newposts
 	var $group_list;
 
 	/**
-	 * @brief initiate
+	 * @brief Constructor 
 	 *
 	 **/
 	function init() 
@@ -44,10 +44,9 @@ class newpostsAdminView extends newposts
 		}
 
 		Context::set('total_count', count($output->data));
-		//Context::set('total_page', $output->total_page);
+		Context::set('total_page', $output->total_page);
 		Context::set('page', $output->page);
 		Context::set('page_navigation', $output->page_navigation);
-
 
 		// module infos
 		if (count($config_list) > 0) 
@@ -66,12 +65,8 @@ class newpostsAdminView extends newposts
 				}
 			}
 		}
+		debugprint($config_list);
 		Context::set('list', $config_list);
-
-		$oNewpostsModel = &getModel('newposts');
-		$config = $oNewpostsModel->getModuleConfig();
-		Context::set('config',$config);
-
 		$this->setTemplateFile('list');
 	}
 
@@ -136,7 +131,7 @@ class newpostsAdminView extends newposts
 		$output = executeQueryArray("newposts.getModuleSrls", $args);
 		if (!$output->toBool()) return $output;
 		$module_srls = array();
-		if ($output->toBool() && $output->data) 
+		if ($output->data) 
 		{
 			foreach ($output->data as $no => $val) 
 			{
@@ -144,14 +139,8 @@ class newpostsAdminView extends newposts
 			}
 		}
 
-		if(sizeOf($module_srls)!=0)
-		{
-			$config->module_srls = join(',', $module_srls);
-		}
-		else
-		{
-			$config->module_srls = $module_srls[0];
-		}
+		$config->module_srls = $module_srls[0];
+		if(sizeOf($module_srls)!=0) $config->module_srls = join(',', $module_srls);
 
 		Context::set('config', $config);
 
@@ -182,7 +171,7 @@ class newpostsAdminView extends newposts
 	 * @brief display 분류별 담당자 지정 페이지
 	 *
 	 **/
-	function dispNewpostsAdminSet()
+	function dispNewpostsAdminSetCategoryAdmins()
 	{
 		//config 정보 가져오기
 		$config_srl = Context::get('config_srl');
@@ -190,21 +179,16 @@ class newpostsAdminView extends newposts
 		$output = executeQuery("newposts.getConfig", $args);
 		if(!$output->toBool()) return $output;
 		$config = $output->data;
-		$output = executequery("newposts.getModuleSrls", $args);
-		
+		$output = executeQueryArray("newposts.getModuleSrls", $args);
 		if (!$output->toBool()) return $output;
 		$module_srls = array();
 
-		if ($output->toBool() && $output->data && sizeOf($output->data)!=1) 
+		if ($output->data) 
 		{
 			foreach ($output->data as $val) 
 			{
 				$module_srls[] = $val->module_srl;
 			}
-		}
-		else
-		{
-			$module_srls[] = $output->data->module_srl;
 		}
 		$tmpOutput = array();
 		$nextOutput = array();
@@ -269,7 +253,7 @@ class newpostsAdminView extends newposts
 		$this->arrangeElement($nextOutput);
 		Context::set('config_srl', $config_srl);
 		Context::set('outputs', $nextOutput);
-		$this->setTemplateFile('set');
+		$this->setTemplateFile('set_category_admins');
 	}
 
 	/**

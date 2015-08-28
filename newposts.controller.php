@@ -34,7 +34,7 @@ class newpostsController extends newposts
 		{
 			$args->reservdate = sprintf("%s%s%s0000", $time, $today, $start);
 		}
-		elseif($hour >= $end)
+		else if($hour >= $end)
 		{
 			$args->reservdate = sprintf("%s%s%s0000", $time, $tomorrow, $start);
 		}
@@ -94,12 +94,13 @@ class newpostsController extends newposts
 		// get Phone# & email address accoring to category admin from newposts_admins table
 		$args->category_srl = $obj->category_srl;
 		$output = executeQuery("newposts.getAdminInfo", $args);
+		if(!$output->toBool()) return $output;
 
 		if (in_array($config->sending_method,array('1','2')) && $oTextmessageController) 
 		{
 			$args->sender_no = $config->sender_phone;
 			$args->type = "sms";
-			if($config->sms_method == 2 && mb_strlen($args->content) > 89) $args->type = "lms";
+			if($config->sms_method == 2 && mb_strlen($content) > 89) $args->type = "lms";
 
 			// 발송 시간 설정 리포트 예약 발송
 			if(date_default_timezone_get() != "Asia/Seoul") date_default_timezone_set('Asia/Seoul');
@@ -114,12 +115,11 @@ class newpostsController extends newposts
 			}
 
 			// 리포트예약발송 on 이면서 시간이 알림 받을 시간이 아니면
-			if($config->reserv_switch =='on' && ($hour < $time_start || $hour >= $end))
+			if($config->reserv_switch == 'on' && ($hour < $start || $hour >= $end))
 			{
 				$this->sendReservedReport($content, $config, $sender);	
 				return;
 			}
-
 
 			// 분류별 게시판 관리자에게 문자알림
 			if($output->data->cellphone)
@@ -141,7 +141,6 @@ class newpostsController extends newposts
 			}
 		}
 
-		// 
 		if (in_array($config->sending_method,array('1','3'))) 
 		{
 			if ($config->sender_email)

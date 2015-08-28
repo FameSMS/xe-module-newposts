@@ -16,12 +16,10 @@ class newpostsAdminModel extends newposts
 		// get configs.
 		$args->config_srl = Context::get('config_srl');
 		$output = executeQuery("newposts.getConfig", $args);
-		$id_list = $output->data->id_list;
-		$group_srl_list = $output->data->group_srl_list;
+		if(!$output->toBool()) return $output;
 		$config = $output->data;
-
-		$args->config_srls = Context::get('config_srls');
 		$output = executeQueryArray("newposts.getModuleInfoByConfigSrl", $args);
+		if(!$output->toBool()) return $output;
 		$mid_list = array();
 		if ($output->data) 
 		{

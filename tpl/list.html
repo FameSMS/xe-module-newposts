@@ -52,7 +52,7 @@
 			<td>{zdate($val->regdate,"Y-m-d")}</td>
 			<td><a href="{getUrl('act','dispNewpostsAdminModify','config_srl',$val->config_srl)}" class="buttonSet buttonSetting"><span>{$lang->cmd_setup}</span></a></td>
 			<td><a href="#delete" class="modalAnchor deleteConfig" data-config-srl="{$val->config_srl}">{$lang->cmd_delete}</a></td>
-			<td><a href="{getUrl('act','dispNewpostsAdminSet','config_srl',$val->config_srl)}" class="buttonSet buttonSetting"><span>{$lang->cmd_set}</span></a></td>
+			<td><a href="{getUrl('act','dispNewpostsAdminSetCategoryAdmins','config_srl',$val->config_srl)}" class="buttonSet buttonSetting"><span>{$lang->cmd_set}</span></a></td>
 		</tr>
 		<tr cond="!count($list)">
 			<td colspan="7" style="text-align:center;">{$lang->no_configuration}</td>
