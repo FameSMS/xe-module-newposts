@@ -76,7 +76,9 @@ class newpostsAdminView extends newposts
 	 **/
 	function dispNewpostsAdminInsert() 
 	{
+		$oNewpostsModel = &getModel('newposts');
 		$oEditorModel = &getModel('editor');
+
 		$config = $oEditorModel->getEditorConfig(0);
 		// set editor options.
 		$option->skin = $config->editor_skin;
@@ -96,6 +98,10 @@ class newpostsAdminView extends newposts
 		$editor = $oEditorModel->getEditor(0, $option);
 		Context::set('editor', $editor);
 
+		// senderIds
+		$sender_ids = $oNewpostsModel->getRegisteredSenderIds();
+		Context::set('sender_ids', $sender_ids);
+		
 		$config->content = Context::getLang('default_content');
 		$config->mail_content = Context::getLang('default_mail_content');
 		Context::set('config', $config);
@@ -109,6 +115,7 @@ class newpostsAdminView extends newposts
 	 **/
 	function dispNewpostsAdminModify() 
 	{
+		$oNewpostsModel = &getModel('newposts');
 		$config_srl = Context::get('config_srl');
 		// load newposts info
 		$args->config_srl = $config_srl;
@@ -141,8 +148,12 @@ class newpostsAdminView extends newposts
 
 		$config->module_srls = $module_srls[0];
 		if(sizeOf($module_srls)!=0) $config->module_srls = join(',', $module_srls);
-
 		Context::set('config', $config);
+
+		// senderIds
+		$sender_ids = $oNewpostsModel->getRegisteredSenderIds();
+		debugprint($sender_ids);
+		Context::set('sender_ids', $sender_ids);
 
 		// editor
 		$oEditorModel = &getModel('editor');

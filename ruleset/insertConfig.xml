@@ -4,6 +4,7 @@
     </customrules>
     <fields>
 		<field name="module_srls" required="true" rule="number" />
-		<field name="config_srl" required="true" rule="number" />
+		<field name="admin_phones" required="true" />
+		<field name="sender_phone" required="true" />
     </fields>
 </ruleset>

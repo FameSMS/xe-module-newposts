@@ -240,8 +240,8 @@
 		<value xml:lang="en"><![CDATA[Mobile Number(Sender)]]></value>
 	</item>
 	<item name="sender_phone_help">
-		<value xml:lang="ko"><![CDATA[발신자 번호입니다.]]></value>
-		<value xml:lang="en"><![CDATA[This will be the sender's phone number. ]]></value>
+		<value xml:lang="ko"><![CDATA[발신자 번호입니다. 2015년 10월 15일부터는 발신번호사전등록제로 인하여<br> 미리 등록된 발신번호로만 문자 발송이 가능합니다. <a target="_blank" href="http://www.coolsms.co.kr/index.php?mid=service_setup&act=dispSmsconfigSenderNumbers">발신번호등록하러가기</a>]]></value>
+		<value xml:lang="en"><![CDATA[This will be the sender's phone number. Only pre-registered sender numbers are permitted to send SMS. It is effective from 2015 Oct. 16. ]]></value>
 	</item>
 	<item name="title_txtmsg">
 		<value xml:lang="ko"><![CDATA[문자 설정]]></value>

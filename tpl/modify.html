@@ -7,7 +7,7 @@
 <load target="js/newposts.js" />
 <include target="header.html" />
 
-<form action="./" class="x_form-horizontal" method="post" ruleset="insertConfig" >
+<form action="./" class="x_form-horizontal" method="post" ruleset="modifyConfig" >
 	<input type="hidden" name="module" value="newposts" />
 	<input type="hidden" name="act" value="procNewpostsAdminModify" />
     <input type="hidden" name="config_srl" value="{$config->config_srl}" />
@@ -128,8 +128,16 @@
 
 			<div class="x_control-group">
 				<label class="x_control-label">{$lang->sender_cellphone}</label>
-					<div class="x_controls">
+					<!--div class="x_controls">
 						<input type="text" name="sender_phone" style="width:250px;" value="{$config->sender_phone}" />
+						<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+						<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
+					</div-->
+					<div class="x_controls">
+						<select name="sender_phone">
+							<option name="">선택하세요</option>
+							<option loop="$sender_ids=>$val" selected|cond="$val->phone_number == $config->sender_phone" value="{$val->phone_number}">{$val->phone_number}</option>
+						</select>
 						<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
 						<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
 					</div>
