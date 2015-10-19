@@ -15,7 +15,6 @@
 	<column name="time_start" type="number" size="10" />
 	<column name="time_end" type="number" size="10" />
 	<column name="reserv_switch" type="varchar" size="10" />
-	<column name="day_switch" type="varchar" size="10" />
 	<column name="selected_days" type="varchar" size="30" />
 	<column name="extra_vars" type="text" />
 	<column name="regdate" type="date" notnull="notnull" index="idx_regdate" />

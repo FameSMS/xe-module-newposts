@@ -2,22 +2,15 @@
 /**
  * vi:set sw=4 ts=4 noexpandtab fileencoding=utf8:
  * @class  newpostsController
- * @author wiley@nurigo.net
+ * @author NURIGO (Contact@nurigo.net)
  * @brief  newpostsController
  */
 class newpostsController extends newposts 
 {
 
-	function _getNextDay($i, $days)
-	{
-		foreach($days as $day)
-		{
-
-		}
-
-	}
 	/**
 	 * @brief 설정된 시간 외에 알림들을 리포트 형식으로 예약 발송
+	 *
 	 **/
 	function sendReservedReport($content, $config, $sender)
 	{
@@ -37,26 +30,15 @@ class newpostsController extends newposts
 		$start = sprintf("%02d", $config->time_start);   	// config에 설정된 시작 시간 
 		$end = sprintf("%02d", $config->time_end);			// config에 설정된 끝나는 시간
 
-		// 오늘을 index 로 가져오기 (일요일 = 0 토요일 = 6)
-		$today_i = date('w');
-		$selected_days = array();
-		$selected_days = explode(',', $config->selected_days);
-
-		if(!in_array($today_i, $selected_days))
-		{
-			$args->reservdate = sprintf("%s%s%s0000", $time, $tomorrow, $start);
-
-		}
-		elseif($hour < $start)
+		if($hour < $start)
 		{
 			$args->reservdate = sprintf("%s%s%s0000", $time, $today, $start);
 		}
-		elseif($hour >= $end)
+		else if($hour >= $end)
 		{
 			$args->reservdate = sprintf("%s%s%s0000", $time, $tomorrow, $start);
 		}
 
-		
 		// extra_vars 에 regdate 가 있다면 이미 발송된 예약문자가 있다는 뜻이므로
 		// 이미 발송된 예약문자를 extra_vars->group_id 로 취소를 한뒤
 		// 다시 문자 발송
@@ -103,6 +85,7 @@ class newpostsController extends newposts
 
 	/**
 	 * @brief 트리거를 통해 문자를 발송
+	 *
 	 **/
 	function sendMessages($content, $mail_content, $obj, $sender, $config) 
 	{
@@ -111,12 +94,13 @@ class newpostsController extends newposts
 		// get Phone# & email address accoring to category admin from newposts_admins table
 		$args->category_srl = $obj->category_srl;
 		$output = executeQuery("newposts.getAdminInfo", $args);
+		if(!$output->toBool()) return $output;
 
 		if (in_array($config->sending_method,array('1','2')) && $oTextmessageController) 
 		{
 			$args->sender_no = $config->sender_phone;
 			$args->type = "sms";
-			if($config->sms_method == 2 && mb_strlen($args->content) > 89) $args->type = "lms";
+			if($config->sms_method == 2 && mb_strlen($content) > 89) $args->type = "lms";
 
 			// 발송 시간 설정 리포트 예약 발송
 			if(date_default_timezone_get() != "Asia/Seoul") date_default_timezone_set('Asia/Seoul');
@@ -130,23 +114,10 @@ class newpostsController extends newposts
 				return;
 			}
 
-			// 오늘을 index 로 가져오기 (일요일 = 0 토요일 = 6)
-			$today = date('w');
-			$selected_days = array();
-			$selected_days = explode(',', $config->selected_days);
-
-			// 리포트예약발송 on  && (현재 시간이 시간설정 안에 없다면)  or
-			// 날짜설정에 오늘날짜가 알림받을 날짜에 선택이 되있지 않고 날짜설정 항상받기가 off 일때 리포트 발송
-			if(($config->reserv_switch =='on' && ($hour < $time_start || $hour >= $end))
-				|| ($config->reserv_switch == 'on' && !in_array($today, $selected_days) && $config->day_switch != 'on'))
+			// 리포트예약발송 on 이면서 시간이 알림 받을 시간이 아니면
+			if($config->reserv_switch == 'on' && ($hour < $start || $hour >= $end))
 			{
 				$this->sendReservedReport($content, $config, $sender);	
-				return;
-			}
-
-			// 시간설정 항상받기 on  &&  날짜설정에 오늘날짜 없고  &&  날짜설정 항상받기 on 이 아니면 return
-			if(($config->time_switch == 'on' && !in_array($today, $selected_days)) && $config->day_switch != 'on')
-			{
 				return;
 			}
 
@@ -170,7 +141,6 @@ class newpostsController extends newposts
 			}
 		}
 
-		//e-mail 발송
 		if (in_array($config->sending_method,array('1','3'))) 
 		{
 			if ($config->sender_email)
@@ -218,6 +188,7 @@ class newpostsController extends newposts
 
 	/**
 	 * @brief 문자 발송전에 문자내용을 준비
+	 *
 	 **/
 	function processNewposts(&$config,&$obj,&$sender,&$module_info) 
 	{
@@ -233,7 +204,6 @@ class newpostsController extends newposts
 		// get document info.
 		$oDocumentModel = &getModel('document');
 		$oDocument = $oDocumentModel->getDocument($obj->document_srl);
-		debugPrint('oDocument : ' . serialize($oDocument));
 */
 		$tmp_obj->article_url = getFullUrl('','document_srl', $obj->document_srl);
 		$tmp_content = $this->mergeKeywords($mail_content, $tmp_obj);
@@ -246,6 +216,7 @@ class newpostsController extends newposts
 	/**
 	 * @brief trigger for document insertion.
 	 * @param $obj : document object.
+	 *
 	 **/
 	function triggerInsertDocument(&$obj) 
 	{
@@ -281,4 +252,5 @@ class newpostsController extends newposts
 		}
 	}
 }
-?>
+/* End of file newposts.controller.php */
+/* Location: ./modules/newposts/newposts.controller.php */

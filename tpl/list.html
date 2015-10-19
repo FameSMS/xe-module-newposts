@@ -7,12 +7,12 @@
 	<thead>
 		<tr>
 			<th scope="col"><div>#</div></th>
-			<th scope="col" class=""><div>알림내용(문자)</div></th>
-			<th scope="col" class=""><div>알림내용(메일)</div></th>
-			<th scope="col" class=""><div>알림방법</div></th>
-			<th scope="col" class="quarter_wide"><div>대상모듈</div></th>
-			<th scope="col" class="quarter_wide"><div>문자타입</div></th>
-			<th scope="col" class="quarter_wide"><div>시간설정</div></th>
+			<th scope="col" class=""><div>{$lang->notify_content}({$lang->method_sms})</div></th>
+			<th scope="col" class=""><div>{$lang->notify_content}({$lang->method_email})</div></th>
+			<th scope="col" class=""><div>{$lang->notify_method}</div></th>
+			<th scope="col" class="quarter_wide"><div>{$lang->target_module}</div></th>
+			<th scope="col" class="quarter_wide"><div>{$lang->text_type}</div></th>
+			<th scope="col" class="quarter_wide"><div>{$lang->time_setting}</div></th>
 			<th scope="col"><div>{$lang->regdate}</div></th>
 			<th scope="col"><div>&nbsp;</div></th>
 			<th scope="col"><div>&nbsp;</div></th>
@@ -25,9 +25,9 @@
 			<td>{htmlspecialchars(substr($val->content, 0, 20))}..</td>
 			<td>{htmlspecialchars(substr($val->mail_content, 0, 20))}..</td>
 			<td>
-				<div cond="$val->sending_method==1">문자&e-mail</div> 
-				<div cond="$val->sending_method==2">문자</div> 
-				<div cond="$val->sending_method==3">e-mail</div> 
+				<div cond="$val->sending_method==1">{$lang->method_sms}&{$lang->method_email}</div> 
+				<div cond="$val->sending_method==2">{$lang->method_sms}</div> 
+				<div cond="$val->sending_method==3">{$lang->method_email}</div> 
 			</td>
 			<td>{@$mod_mid=array()}
 				<!--@foreach($val->module_info as $mod)-->
@@ -36,8 +36,8 @@
 				{join(', ', $mod_mid)}
 			</td>
 			<td>
-				<div cond="$val->sms_method==1" title="알림 내용이 90바이트 이상이면 일부내용이 잘릴수 있습니다.">단문만</div> 
-				<div cond="$val->sms_method==2" title="알림 내용이 90바이트 이상이면 장문으로 변경하여 발송합니다.">장문가능</div> 
+				<div cond="$val->sms_method==1" title="{$lang->sms_method1_title}">{$lang->only_sms}</div> 
+				<div cond="$val->sms_method==2" title="{$lang->sms_method2_title}">{$lang->enable_mms}</div> 
 			</td>
 			<td>
 				{@$start = $val->time_start}
@@ -47,15 +47,15 @@
 					~
 					{$end % 12 ? sprintf('%02d', $end % 12) : 12 }:00 {$end >= 12 ? 'pm' : 'am'}	
 				</div>
-				<div cond="$val->time_switch || !$start || !$end"> 항상 알림</div>
+				<div cond="$val->time_switch || !$start || !$end">{$lang->receive_always}</div>
 			</td>
 			<td>{zdate($val->regdate,"Y-m-d")}</td>
 			<td><a href="{getUrl('act','dispNewpostsAdminModify','config_srl',$val->config_srl)}" class="buttonSet buttonSetting"><span>{$lang->cmd_setup}</span></a></td>
 			<td><a href="#delete" class="modalAnchor deleteConfig" data-config-srl="{$val->config_srl}">{$lang->cmd_delete}</a></td>
-			<td><a href="{getUrl('act','dispNewpostsAdminSet','config_srl',$val->config_srl)}" class="buttonSet buttonSetting"><span>{$lang->cmd_set}</span></a></td>
+			<td><a href="{getUrl('act','dispNewpostsAdminSetCategoryAdmins','config_srl',$val->config_srl)}" class="buttonSet buttonSetting"><span>{$lang->cmd_set}</span></a></td>
 		</tr>
 		<tr cond="!count($list)">
-			<td colspan="7" style="text-align:center;">등록된 설정이 없습니다.</td>
+			<td colspan="7" style="text-align:center;">{$lang->no_configuration}</td>
 		</tr>
 	</tbody>
 	</table>

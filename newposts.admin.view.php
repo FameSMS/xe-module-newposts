@@ -2,13 +2,17 @@
 /**
  * vi:set sw=4 ts=4 noexpandtab fileencoding=utf8:
  * @class  newpostsAdminView
- * @author wiley(wiley@nurigo.net)
+ * @author NURIGO (Contact@nurigo.net)
  * @brief  newpostsAdminView
  */ 
 class newpostsAdminView extends newposts 
 {
 	var $group_list;
 
+	/**
+	 * @brief Constructor 
+	 *
+	 **/
 	function init() 
 	{
 		$oMemberModel = &getModel('member');
@@ -23,6 +27,7 @@ class newpostsAdminView extends newposts
 
 	/**
 	 * @brief newposts configuration list.
+	 *
 	 **/
 	function dispNewpostsAdminList() 
 	{
@@ -39,10 +44,9 @@ class newpostsAdminView extends newposts
 		}
 
 		Context::set('total_count', count($output->data));
-		//Context::set('total_page', $output->total_page);
+		Context::set('total_page', $output->total_page);
 		Context::set('page', $output->page);
 		Context::set('page_navigation', $output->page_navigation);
-
 
 		// module infos
 		if (count($config_list) > 0) 
@@ -61,21 +65,20 @@ class newpostsAdminView extends newposts
 				}
 			}
 		}
+		debugprint($config_list);
 		Context::set('list', $config_list);
-
-		$oNewpostsModel = &getModel('newposts');
-		$config = $oNewpostsModel->getModuleConfig();
-		Context::set('config',$config);
-
 		$this->setTemplateFile('list');
 	}
 
 	/**
 	 * @brief insert newposts configuration info.
+	 *
 	 **/
 	function dispNewpostsAdminInsert() 
 	{
+		$oNewpostsModel = &getModel('newposts');
 		$oEditorModel = &getModel('editor');
+
 		$config = $oEditorModel->getEditorConfig(0);
 		// set editor options.
 		$option->skin = $config->editor_skin;
@@ -95,6 +98,10 @@ class newpostsAdminView extends newposts
 		$editor = $oEditorModel->getEditor(0, $option);
 		Context::set('editor', $editor);
 
+		// senderIds
+		$sender_ids = $oNewpostsModel->getRegisteredSenderIds();
+		Context::set('sender_ids', $sender_ids);
+		
 		$config->content = Context::getLang('default_content');
 		$config->mail_content = Context::getLang('default_mail_content');
 		Context::set('config', $config);
@@ -104,9 +111,11 @@ class newpostsAdminView extends newposts
 
 	/**
 	 * @brief modify newposts configuration.
+	 *
 	 **/
 	function dispNewpostsAdminModify() 
 	{
+		$oNewpostsModel = &getModel('newposts');
 		$config_srl = Context::get('config_srl');
 		// load newposts info
 		$args->config_srl = $config_srl;
@@ -129,7 +138,7 @@ class newpostsAdminView extends newposts
 		$output = executeQueryArray("newposts.getModuleSrls", $args);
 		if (!$output->toBool()) return $output;
 		$module_srls = array();
-		if ($output->toBool() && $output->data) 
+		if ($output->data) 
 		{
 			foreach ($output->data as $no => $val) 
 			{
@@ -137,14 +146,14 @@ class newpostsAdminView extends newposts
 			}
 		}
 
-		if(sizeOf($module_srls)!=0)
-		{
-			$config->module_srls = join(',', $module_srls);
-		}else{
-			$config->module_srls = $module_srls[0];
-		}
-
+		$config->module_srls = $module_srls[0];
+		if(sizeOf($module_srls)!=0) $config->module_srls = join(',', $module_srls);
 		Context::set('config', $config);
+
+		// senderIds
+		$sender_ids = $oNewpostsModel->getRegisteredSenderIds();
+		debugprint($sender_ids);
+		Context::set('sender_ids', $sender_ids);
 
 		// editor
 		$oEditorModel = &getModel('editor');
@@ -169,7 +178,11 @@ class newpostsAdminView extends newposts
 		$this->setTemplateFile('modify');
 	}
 
-	function dispNewpostsAdminSet()
+	/**
+	 * @brief display 분류별 담당자 지정 페이지
+	 *
+	 **/
+	function dispNewpostsAdminSetCategoryAdmins()
 	{
 		//config 정보 가져오기
 		$config_srl = Context::get('config_srl');
@@ -177,19 +190,16 @@ class newpostsAdminView extends newposts
 		$output = executeQuery("newposts.getConfig", $args);
 		if(!$output->toBool()) return $output;
 		$config = $output->data;
-		$output = executequery("newposts.getModuleSrls", $args);
-		
+		$output = executeQueryArray("newposts.getModuleSrls", $args);
 		if (!$output->toBool()) return $output;
 		$module_srls = array();
 
-		if ($output->toBool() && $output->data && sizeOf($output->data)!=1) 
+		if ($output->data) 
 		{
 			foreach ($output->data as $val) 
 			{
 				$module_srls[] = $val->module_srl;
 			}
-		}else{
-			$module_srls[] = $output->data->module_srl;
 		}
 		$tmpOutput = array();
 		$nextOutput = array();
@@ -244,7 +254,9 @@ class newpostsAdminView extends newposts
 			if(count($output->data)!=0)
 			{
 				$nextOutput[$module_info->data->module_srl] = $obj;
-			}else{
+			}
+			else
+			{
 				array_splice($nextOutput, $i, 1);
 			}
 		}
@@ -252,9 +264,13 @@ class newpostsAdminView extends newposts
 		$this->arrangeElement($nextOutput);
 		Context::set('config_srl', $config_srl);
 		Context::set('outputs', $nextOutput);
-		$this->setTemplateFile('set');
+		$this->setTemplateFile('set_category_admins');
 	}
-	// rearrange array : parent board -> child board
+
+	/**
+	 * @brief tool for arranging elements
+	 *
+	 **/
 	function arrangeElement(&$array)
 	{
 		$i = 0;
@@ -288,16 +304,6 @@ class newpostsAdminView extends newposts
 		}
 		$array = $sortedData;	
 	}
-
-	function dispnewpostsAdminInsertTestDocument()
-	{
-		$oBoardController = &getController('board');
-		$output = $oBoardController->procBoardInsertDocument();
-		debugprint($output);
-
-		$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminList');
-		$this->setRedirectUrl($redirectUrl);
-	}
 }
-
-?>
+/* End of file newposts.admin.view.php */
+/* Location: ./modules/newposts/newposts.admin.view.php */

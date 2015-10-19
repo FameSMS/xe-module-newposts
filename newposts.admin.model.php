@@ -2,22 +2,24 @@
 /**
  * vi:set sw=4 ts=4 noexpandtab fileencoding=utf8:
  * @class  newpostsAdminModel
- * @author diver(diver@coolsms.co.kr)
+ * @author NURIGO (Contact@nurigo.net)
  * @brief  newpostsAdminModel
  */
 class newpostsAdminModel extends newposts 
 {
+	/**
+	 * @brief get templates for deleting config
+	 *
+	 **/
 	function getNewpostsAdminDelete() 
 	{
 		// get configs.
 		$args->config_srl = Context::get('config_srl');
 		$output = executeQuery("newposts.getConfig", $args);
-		$id_list = $output->data->id_list;
-		$group_srl_list = $output->data->group_srl_list;
+		if(!$output->toBool()) return $output;
 		$config = $output->data;
-
-		$args->config_srls = Context::get('config_srls');
 		$output = executeQueryArray("newposts.getModuleInfoByConfigSrl", $args);
+		if(!$output->toBool()) return $output;
 		$mid_list = array();
 		if ($output->data) 
 		{
@@ -27,7 +29,6 @@ class newpostsAdminModel extends newposts
 			}
 		}
 		$config->mid_list = join(',', $mid_list);
-
 		Context::set('config', $config);
 
 		$oTemplate = &TemplateHandler::getInstance();
@@ -35,4 +36,5 @@ class newpostsAdminModel extends newposts
 		$this->add('tpl', str_replace("\n"," ",$tpl));
 	}
 }
-?>
+/* End of file newposts.admin.model.php */
+/* Location: ./modules/newposts/newposts.admin.model.php */

@@ -16,12 +16,9 @@ function addReplaceVar(varStr) {
 }) (jQuery);
 
 function getCursor(el) {
-        if (el.prop("selectionStart")) 
-		{
+        if (el.prop("selectionStart")) {
             return el.prop("selectionStart");
-        } 
-		else if (document.selection) 
-		{
+        } else if (document.selection) {
             el.focus();
 
             var r = document.selection.createRange();
@@ -89,10 +86,4 @@ jQuery(document).ready(function() {
 								jQuery("#selected_days").val(selected);
 						}
 				 });
-
-	var selected_days = jQuery("#selected_days").val();
-	week_cal.weekLine('setSelected', selected_days);
-	
 });
-
-

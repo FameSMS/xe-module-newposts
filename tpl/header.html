@@ -4,17 +4,17 @@
 		{$lang->cmd_newposts}
 		<a href="#aboutModule" data-toggle class="x_icon-question-sign">{$lang->help}</a>
 	</h1>
-	<p class="x_alert x_alert-info" id="aboutModule" hidden>누리고 새글알림 모듈입니다.</p>
+	<p class="x_alert x_alert-info" id="aboutModule" hidden>{$lang->about_module}</p>
 </div>
 
 <ul class="x_nav x_nav-tabs">
-	<li class="x_active"|cond="$act=='dispNewpostsAdminList'"> <a href="{getUrl('act','dispNewpostsAdminList')}">목록</a> </li>
+	<li class="x_active"|cond="$act=='dispNewpostsAdminList'"> <a href="{getUrl('act','dispNewpostsAdminList')}">{$lang->cmd_list}</a> </li>
 	<li cond="0" class="x_active"|cond="$act=='dispNewpostsAdminInsertTestDocument'"> <a href="{getUrl('act','dispNewpostsAdminInsertTestDocument')}">TEST</a> </li>
 	<li cond="$act=='dispNewpostsAdminInsert'" class="x_active"|cond="$act=='dispNewpostsAdminInsert' || $act=='dispNewpostsAdminModify'">
-		<a href="{getUrl('act','dispNewpostsAdminInsert')}">등록</a>
+	<a href="{getUrl('act','dispNewpostsAdminInsert')}">{$lang->cmd_registration}</a>
 	</li>
 	<li cond="$act=='dispNewpostsAdminModify'" class="x_active"|cond="$act=='dispNewpostsAdminModify'">
-		<a href="{getUrl('act','dispNewpostsAdminModify')}">수정</a>
+	<a href="{getUrl('act','dispNewpostsAdminModify')}">{$lang->cmd_modify}</a>
 	</li>
 </ul>
 <div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">

@@ -1,13 +1,13 @@
 <load target="css/phone.css" />
 <load target="css/newposts.css" />
-<load target="js/target.js" />
-<load target="js/newposts.js" />
 <load target="js/weekline/js/jquery.weekLine.min.js"/>
 <load target="js/weekline/css/cleanslate.css" />
 <load target="js/weekline/css/jquery.weekLine.css" />
+<load target="js/target.js" />
+<load target="js/newposts.js" />
 <include target="header.html" />
 
-<form action="./" class="x_form-horizontal" method="post">
+<form action="./" class="x_form-horizontal" method="post" ruleset="modifyConfig" >
 	<input type="hidden" name="module" value="newposts" />
 	<input type="hidden" name="act" value="procNewpostsAdminModify" />
     <input type="hidden" name="config_srl" value="{$config->config_srl}" />
@@ -102,15 +102,12 @@
 					</p>
 				</div>
 
-				<div class="x_control-group" cond="1">
+				<div class="x_control-group" cond="0">
 					<label class="x_control-label">날짜설정</label>
 					<div class="x_controls">
 						<label class="x_inline" for="time_start">
 							<div id="week_cal"> </div>
 							<input type="hidden" name="selected_days" id="selected_days" value="{$config->selected_days}" />
-						</label>
-						<label class="x_inline" for="day_switch">
-							<input type="checkbox" name="day_switch" id="day_switch" checked|cond="$config->day_switch=='on'" />항상 받기
 						</label>
 					</div>
 				</div>		
@@ -131,8 +128,16 @@
 
 			<div class="x_control-group">
 				<label class="x_control-label">{$lang->sender_cellphone}</label>
-					<div class="x_controls">
+					<!--div class="x_controls">
 						<input type="text" name="sender_phone" style="width:250px;" value="{$config->sender_phone}" />
+						<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+						<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
+					</div-->
+					<div class="x_controls">
+						<select name="sender_phone">
+							<option name="">선택하세요</option>
+							<option loop="$sender_ids=>$val" selected|cond="$val->phone_number == $config->sender_phone" value="{$val->phone_number}">{$val->phone_number}</option>
+						</select>
 						<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
 						<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
 					</div>
