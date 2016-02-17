@@ -133,7 +133,6 @@ class newpostsController extends newposts
 			//전체관리자 문자알림 : 분류에 상관없이 보냄
 			$args->recipient_no = explode(',',$config->admin_phones);
 			$args->content = $content;
-
 			if(count($args->recipient_no))
 			{
 				$result = $oTextmessageController->sendMessage($args);
@@ -200,11 +199,6 @@ class newpostsController extends newposts
 		// mail content
 		$mail_content = $this->mergeKeywords($config->mail_content, $obj);
 		$mail_content = $this->mergeKeywords($mail_content, $module_info);
-/*
-		// get document info.
-		$oDocumentModel = &getModel('document');
-		$oDocument = $oDocumentModel->getDocument($obj->document_srl);
-*/
 		$tmp_obj->article_url = getFullUrl('','document_srl', $obj->document_srl);
 		$tmp_content = $this->mergeKeywords($mail_content, $tmp_obj);
 		$tmp_message = $this->mergeKeywords($sms_message, $tmp_obj);

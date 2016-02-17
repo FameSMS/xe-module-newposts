@@ -6,6 +6,6 @@
 		<column name="*"  />
 	</columns>
 	<conditions>
-		<condition operation="equal" column="category_srl" var="category_srl" notnull="notnull" />
+		<condition operation="equal" column="category_srl" var="category_srl" default="0" />
 	</conditions>
-</query>ä
+</query>
