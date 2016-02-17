@@ -148,7 +148,6 @@ class newpostsAdminController extends newposts
 			$args->email = $email[$i];
 			$args->category_srl = $category_srl[$i];
 			$output = executeQueryArray("newposts.updateAdminInfo", $args);
-			debugprint($output);
 			if(!$output->toBool()) return $output;
 		}
 

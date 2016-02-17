@@ -152,7 +152,6 @@ class newpostsAdminView extends newposts
 
 		// senderIds
 		$sender_ids = $oNewpostsModel->getRegisteredSenderIds();
-		debugprint($sender_ids);
 		Context::set('sender_ids', $sender_ids);
 
 		// editor

@@ -63,24 +63,9 @@ class newpostsModel extends newposts
 	 */
 	function getRegisteredSenderIds()
 	{
-		$coolsms = $this->__getCoolsms();
-		$coolsms->get_senderid_list();
-		$result = $coolsms->getResult();
+		$oTextmessageModel = &getModel('textmessage');
+		$result = $oTextmessageModel->getSenderNumbers();
 		return $result;
-	}
-
-	/**
-	 * @brief get coolsms object
-	 */
-	function __getCoolsms()
-	{
-		$logged_info = Context::get('logged_info');
-		if(!$logged_info) return new Object(-1, 'login required');
-		$user_id = $logged_info->user_id;
-		$password = $logged_info->password;
-
-		require "coolsms.php";
-		return new Coolsms($user_id, $password, true);
 	}
 }
 /* End of file newposts.model.php */
