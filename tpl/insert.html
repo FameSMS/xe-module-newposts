@@ -49,7 +49,8 @@
 				<div class="x_control-group">
 					<label class="x_control-label">{$lang->sending_method}</label>
 					<div class="x_controls">
-						<label class="x_inline" for="sms_method_1"><input type="radio" name="sms_method" id="sms_method_1" value="1" checked="checked"|cond="$config->sms_method=='1'||!$config->sms_method" />{$lang->only_sms}</label>
+						<label class="x_inline" for="sms_method_3"><input type="radio" name="sms_method" id="sms_method_3" value="3" checked="checked"|cond="$config->sms_method=='3'||!$config->sms_method" />{$lang->enable_alimtalk}</label>
+						<label class="x_inline" for="sms_method_1"><input type="radio" name="sms_method" id="sms_method_1" value="1" checked="checked"|cond="$config->sms_method=='1'" />{$lang->only_sms}</label>
 						<label class="x_inline" for="sms_method_2"><input type="radio" name="sms_method" id="sms_method_2" value="2" checked="checked"|cond="$config->sms_method=='2'" />{$lang->enable_mms}</label>
 						<a href="#sms_method_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
 						<p id="sms_method_help" class="x_help-block" hidden> {$lang->sms_method_help_message} </p>
@@ -98,6 +99,26 @@
 						</label>
 					</div>
 				</div>				
+		</section>
+
+		<section class="section">
+			<h2>{$lang->alimtalk_setup}</h2>
+			<div class="x_control-group">
+				<label class="x_control-label">Sender Key</label>
+				<div class="x_controls">
+					<input type="text" name="sender_key" value="{$config->sender_key}" />
+					<a href="#sender_key_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+					<p id="sender_key_help" class="x_help-block" hidden>{$lang->help_sender_key}</p>
+				</div>
+			</div>
+			<div class="x_control-group">
+				<label class="x_control-label">Template Code</label>
+				<div class="x_controls">
+					<input type="text" name="template_code" value="{$config->template_code}" />
+					<a href="#template_code_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+					<p id="template_code_help" class="x_help-block" hidden>{$lang->help_template_code}</p>
+				</div>
+			</div>
 		</section>
 
 		<section class="section">

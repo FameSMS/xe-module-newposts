@@ -9,7 +9,7 @@
 		<value xml:lang="en"><![CDATA[[Notification]\n%browser_title%\n%nick_name\n%content%\n%article_url%]]></value>
 	</item>
 	<item name="sms_method_help_message">
-		<value xml:lang="ko"><![CDATA[단문문자만을 선택하시면 알림 내용이 90바이트 이상시, 일부는 전송되지 않습니다.<br>장문가능은 알림내용이 90바이트 이하일경우에는 단문(SMS)발송, 이상일경우에는 장문(LMS)로 발송됩니다.]]></value>
+		<value xml:lang="ko"><![CDATA[알림톡 우선: 카카오톡으로 발송을 시도하고 실패시 문자로 대체 발송합니다. (알림톡 설정 요구됨)<br />단문문자만 : 알림 내용이 90바이트 이상시, 일부는 전송되지 않습니다.<br>장문가능 : 알림내용이 90바이트 이하일경우에는 단문(SMS)발송, 이상일경우에는 장문(LMS)로 발송됩니다.]]></value>
 	</item>
 	<item name="default_mail_content">
 		<value xml:lang="ko"><![CDATA[<p>브라우저제목 : %browser_title%<br />닉네임 : %nick_name%<br />내용 : %content%<br />문서 URL : %article_url%</p>]]></value>
@@ -82,6 +82,10 @@
 	<item name="only_sms">
 		<value xml:lang="ko"><![CDATA[단문문자만]]></value>
 		<value xml:lang="en"><![CDATA[Only SMS]]></value>
+	</item>
+	<item name="enable_alimtalk">
+		<value xml:lang="ko"><![CDATA[알림톡 우선]]></value>
+		<value xml:lang="en"><![CDATA[Enable Alimtalk]]></value>
 	</item>
 	<item name="cmd_choose">
 		<value xml:lang="ko"><![CDATA[선택하세요.]]></value>
@@ -250,5 +254,17 @@
 	<item name="title_email">
 		<value xml:lang="ko"><![CDATA[E-mail 설정]]></value>
 		<value xml:lang="en"><![CDATA[E-mail Setting]]></value>
+	</item>
+	<item name="alimtalk_setup">
+		<value xml:lang="ko"><![CDATA[알림톡 설정]]></value>
+		<value xml:lang="en"><![CDATA[AlimTalk Setup]]></value>
+	</item>
+	<item name="help_sender_key">
+		<value xml:lang="ko"><![CDATA[옐로아이디를 제출하고 발급받은 Sender Key값을 입력합니다. <a href="http://www.coolsms.co.kr/AboutAlimTalk">Sender Key 발급</a>]]></value>
+		<value xml:lang="en"><![CDATA[Input Sender Key]]></value>
+	</item>
+	<item name="help_template_code">
+		<value xml:lang="ko"><![CDATA[발송하시려는 문구가 포함된 검수받은 템플릿 코드를 입력하세요.]]></value>
+		<value xml:lang="en"><![CDATA[Input Template Code]]></value>
 	</item>
 </lang>
