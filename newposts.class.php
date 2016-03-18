@@ -50,6 +50,7 @@ class newposts extends ModuleObject
 	 **/
 	function checkUpdate() 
 	{
+		error_log('checkUpdate');
 		$oDB = &DB::getInstance();
 		$oModuleModel = &getModel('module');
 		$oModuleController = &getController('module');
@@ -81,6 +82,11 @@ class newposts extends ModuleObject
 
 		// 2015. 06. 12 add newposts_config.selected_days
 		if(!$oDB->isColumnExists("newposts_config","selected_days")) return true;
+
+		// 2016/03/17
+		if(!$oDB->isColumnExists("newposts_config","sender_key")) return true;
+		// 2016/03/17
+		if(!$oDB->isColumnExists("newposts_config","template_code")) return true;
 
 		return false;
 	}
@@ -126,6 +132,12 @@ class newposts extends ModuleObject
 		}
 		if(!$oDB->isColumnExists("newposts_config","selected_days")) {
 			$oDB->addColumn("newposts_config", "selected_days", "varchar", "30");
+		}
+		if(!$oDB->isColumnExists("newposts_config","sender_key")) {
+			$oDB->addColumn("newposts_config", "sender_key", "varchar", "60");
+		}
+		if(!$oDB->isColumnExists("newposts_config","template_code")) {
+			$oDB->addColumn("newposts_config", "template_code", "varchar", "30");
 		}
 	}
 

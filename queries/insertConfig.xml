@@ -20,6 +20,8 @@
 		<column name="time_end" var="time_end" />
 		<column name="reserv_switch" var="reserv_switch" />
 		<column name="selected_days" var="selected_days" />
+		<column name="sender_key" var="sender_key" />
+		<column name="template_code" var="template_code" />
 		<column name="extra_vars" var="extra_vars" default="" />
 		<column name="regdate" var="regdate" default="curdate()" />
 	</columns>

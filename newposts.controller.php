@@ -94,13 +94,19 @@ class newpostsController extends newposts
 		// get Phone# & email address accoring to category admin from newposts_admins table
 		$args->category_srl = $obj->category_srl;
 		$output = executeQuery("newposts.getAdminInfo", $args);
+		debugPrint(serialize($output));
 		if(!$output->toBool()) return $output;
 
 		if (in_array($config->sending_method,array('1','2')) && $oTextmessageController) 
 		{
 			$args->sender_no = $config->sender_phone;
-			$args->type = "sms";
 			if($config->sms_method == 2 && mb_strlen($content) > 89) $args->type = "lms";
+			if($config->sms_method == 3)
+			{
+				$args->type = 'ata';
+				$args->sender_key = $config->sender_key;
+				$args->template_code = $config->template_code;
+			}
 
 			// 발송 시간 설정 리포트 예약 발송
 			if(date_default_timezone_get() != "Asia/Seoul") date_default_timezone_set('Asia/Seoul');
@@ -136,6 +142,7 @@ class newpostsController extends newposts
 			if(count($args->recipient_no))
 			{
 				$result = $oTextmessageController->sendMessage($args);
+				debugPrint(serialize($result));
 				if (!$result->toBool()) return $output;
 			}
 		}
@@ -214,6 +221,7 @@ class newpostsController extends newposts
 	 **/
 	function triggerInsertDocument(&$obj) 
 	{
+		debugPrint('triggerInsertDocument');
 		$oMemberModel = &getModel('member');
 		$oModel = &getModel('newposts');
 

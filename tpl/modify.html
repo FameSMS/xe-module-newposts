@@ -49,14 +49,11 @@
 			<div class="x_control-group">
 				<label class="x_control-label">문자방식</label>
 				<div class="x_controls">
-					<label class="x_inline" for="sms_method_1"><input type="radio" name="sms_method" id="sms_method_1" value="1" checked="checked"|cond="$config->sms_method=='1'||!$config->sms_method" />단문문자만 </label>
+					<label class="x_inline" for="sms_method_3"><input type="radio" name="sms_method" id="sms_method_3" value="3" checked="checked"|cond="$config->sms_method=='3'||!$config->sms_method" />{$lang->enable_alimtalk}</label>
+					<label class="x_inline" for="sms_method_1"><input type="radio" name="sms_method" id="sms_method_1" value="1" checked="checked"|cond="$config->sms_method=='1'" />단문문자만 </label>
 					<label class="x_inline" for="sms_method_2"><input type="radio" name="sms_method" id="sms_method_2" value="2" checked="checked"|cond="$config->sms_method=='2'" />장문가능 </label>
 					<a href="#sms_method_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
-					<p id="sms_method_help" class="x_help-block" hidden>
-						단문문자만을 선택하시면 알림 내용이 90바이트 이상시, 일부는 전송되지 않습니다. 
-						<br>
-						장문가능은 알림내용이 90바이트 이하일경우에는 단문(SMS)발송, 이상일경우에는 장문(LMS)로 발송됩니다.
-					</p>
+					<p id="sms_method_help" class="x_help-block" hidden>{$lang->sms_method_help_message}</p>
 				</div>
 			</div>
 
@@ -112,6 +109,26 @@
 					</div>
 				</div>		
 			</div>
+	</section>
+
+	<section class="section">
+		<h2>{$lang->alimtalk_setup}</h2>
+		<div class="x_control-group">
+			<label class="x_control-label">Sender Key</label>
+			<div class="x_controls">
+				<input type="text" name="sender_key" value="{$config->sender_key}" />
+				<a href="#admin_phones_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="admin_phones_help" class="x_help-block" hidden>{$lang->help_sender_key}</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label">Template Code</label>
+			<div class="x_controls">
+				<input type="text" name="template_code" value="{$config->template_code}" />
+				<a href="#admin_phones_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="admin_phones_help" class="x_help-block" hidden>{$lang->help_template_code}</p>
+			</div>
+		</div>
 	</section>
 
 	<section class="section">
