@@ -88,6 +88,10 @@ class newposts extends ModuleObject
 		// 2016/03/17
 		if(!$oDB->isColumnExists("newposts_config","template_code")) return true;
 
+		if(!$oDB->isColumnExists("newposts_config","send_to_writer")) return true;
+		if(!$oDB->isColumnExists("newposts_config","writer_content")) return true;
+		if(!$oDB->isColumnExists("newposts_config","writer_extra_key")) return true;
+
 		return false;
 	}
 
@@ -139,6 +143,16 @@ class newposts extends ModuleObject
 		if(!$oDB->isColumnExists("newposts_config","template_code")) {
 			$oDB->addColumn("newposts_config", "template_code", "varchar", "30");
 		}
+
+		if(!$oDB->isColumnExists("newposts_config","send_to_writer")) {
+			$oDB->addColumn("newposts_config", "send_to_writer", "char", "1");
+		}
+		if(!$oDB->isColumnExists("newposts_config","writer_content")) {
+			$oDB->addColumn("newposts_config", "writer_content", "bigtext");
+		}
+		if(!$oDB->isColumnExists("newposts_config","writer_extra_key")) {
+			$oDB->addColumn("newposts_config", "writer_extra_key", "varchar", "50");
+		}
 	}
 
 	/**
@@ -146,6 +160,31 @@ class newposts extends ModuleObject
 	 **/
 	function recompileCache() 
 	{
+	}
+
+	/**
+	 * XE Object를 생성하여 반환한다.
+	 *
+	 * XE 1.8 이하, XE 1.9 이상, PHP 7.1 이하, PHP 7.2 이상 모두 호환된다.
+	 * 기본적인 사용법은 return new Object(-1, 'error'); 라고 쓸 자리에
+	 * return $this->createObject(-1, 'error'); 라고 쓰면 된다.
+	 *
+	 * 반환할 언어 내용 중 %s, %d 등 변수를 치환하는 부분이 있다면
+	 * 치환할 내용을 추가 파라미터로 넘겨주면 sprintf()의 역할까지 해준다.
+	 *
+	 * @param string $message
+	 * @param $arg1, $arg2 ...
+	 * @return object
+	 */
+	public function createObject($status = 0, $message = 'success' /* $arg1, $arg2 ... */)
+	{
+		$args = func_get_args();
+		if (count($args) > 2)
+		{
+			global $lang;
+			$message = vsprintf($lang->$message, array_slice($args, 2));
+		}
+		return class_exists('BaseObject') ? new BaseObject($status, $message) : new Object($status, $message);
 	}
 }
 /* End of file newposts.class.php */

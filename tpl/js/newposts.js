@@ -3,6 +3,11 @@ function addReplaceVar(varStr) {
 	cursor = getCursor(target);
 	appendAtCursor(target, cursor, varStr);
 }
+function addReplaceVars(varStr) {
+	target = jQuery('textarea[name=writer_content]');
+	cursor = getCursor(target);
+	appendAtCursor(target, cursor, varStr);
+}
 (function($) {
 	jQuery(function($) {
 		// replace var
@@ -10,6 +15,10 @@ function addReplaceVar(varStr) {
 			addReplaceVar('%' + $(this).attr('var') + '%');
 			return false;
 		});
+		$('.notiReplaceVars').click(function() {
+			addReplaceVars('%' + $(this).attr('var') + '%');
+			return false;
+		})
 	});
 }) (jQuery);
 

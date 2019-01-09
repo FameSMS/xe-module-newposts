@@ -21,7 +21,9 @@
 		<column name="reserv_switch" var="reserv_switch" />
 		<column name="selected_days" var="selected_days" />
 		<column name="sender_key" var="sender_key" />
-		<column name="template_code" var="template_code" />
+		<column name="send_to_writer" var="send_to_writer" />
+		<column name="writer_content" var="writer_content" />
+		<column name="writer_extra_key" var="writer_extra_key" />
 		<column name="extra_vars" var="extra_vars" default="" />
 		<column name="regdate" var="regdate" default="curdate()" />
 	</columns>

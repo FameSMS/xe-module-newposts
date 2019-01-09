@@ -87,11 +87,12 @@ class newpostsController extends newposts
 	 * @brief 트리거를 통해 문자를 발송
 	 *
 	 **/
-	function sendMessages($content, $mail_content, $obj, $sender, $config) 
+	function sendMessages($content, $mail_content, $obj, $sender, $config, $writer_sms_message = false)
 	{
 		$oTextmessageController = &getController('textmessage');
 		$oNewpostsModel = &getModel('newposts');
 		// get Phone# & email address accoring to category admin from newposts_admins table
+		$args = new stdClass();
 		$args->category_srl = $obj->category_srl;
 		$output = executeQuery("newposts.getAdminInfo", $args);
 		debugPrint(serialize($output));
@@ -142,7 +143,14 @@ class newpostsController extends newposts
 			if(count($args->recipient_no))
 			{
 				$result = $oTextmessageController->sendMessage($args);
-				debugPrint(serialize($result));
+				if (!$result->toBool()) return $output;
+			}
+			
+			if($config->send_to_writer == 'Y')
+			{
+				$args->recipient_no = $sender->phone[0].$sender->phone[1].$sender->phone[2];
+				$args->content = $writer_sms_message;
+				$result = $oTextmessageController->sendMessage($args);
 				if (!$result->toBool()) return $output;
 			}
 		}
@@ -198,20 +206,35 @@ class newpostsController extends newposts
 	 **/
 	function processNewposts(&$config,&$obj,&$sender,&$module_info) 
 	{
-		$oMemberModel = &getModel('member');
-		// message content
 		$sms_message = $this->mergeKeywords($config->content, $obj);
 		$sms_message = $this->mergeKeywords($sms_message, $module_info);
 		$sms_message = str_replace("&nbsp;", "", strip_tags($sms_message));
+
+		if($config->send_to_writer == 'Y')
+		{
+			$writer_sms_message = $this->mergeKeywords($config->writer_content, $obj);
+			$writer_sms_message = $this->mergeKeywords($writer_sms_message, $module_info);
+			$writer_sms_message = str_replace("&nbsp;", "", strip_tags($writer_sms_message));
+		}
+		else
+		{
+			$writer_sms_message = false;
+		}
+		
 		// mail content
 		$mail_content = $this->mergeKeywords($config->mail_content, $obj);
 		$mail_content = $this->mergeKeywords($mail_content, $module_info);
+		$tmp_obj = new stdClass();
 		$tmp_obj->article_url = getFullUrl('','document_srl', $obj->document_srl);
 		$tmp_content = $this->mergeKeywords($mail_content, $tmp_obj);
 		$tmp_message = $this->mergeKeywords($sms_message, $tmp_obj);
+		if($writer_sms_message)
+		{
+			$writer_sms_message = $this->mergeKeywords($writer_sms_message, $tmp_obj);
+		}
 
 		// 기존 $obj->title 을 $obj 으로 변경 
-		$this->sendMessages($tmp_message, $tmp_content, $obj, $sender, $config);
+		$this->sendMessages($tmp_message, $tmp_content, $obj, $sender, $config, $writer_sms_message);
 	}
 
 	/**
@@ -219,38 +242,51 @@ class newpostsController extends newposts
 	 * @param $obj : document object.
 	 *
 	 **/
-	function triggerInsertDocument(&$obj) 
+	function triggerInsertDocument(&$obj)
 	{
-		debugPrint('triggerInsertDocument');
-		$oMemberModel = &getModel('member');
-		$oModel = &getModel('newposts');
+		$oNewpostsModel = getModel('newposts');
 
 		// if module_srl not set, just return with success;
-		if (!$obj->module_srl) return;
+		if (!$obj->module_srl)
+		{
+			return;
+		}
 
 		// if module_srl is wrong, just return with success
+		$args = new stdClass();
 		$args->module_srl = $obj->module_srl;
 		$output = executeQuery('module.getMidInfo', $args);
-		if (!$output->toBool() || !$output->data) return;
+		if (!$output->toBool() || !$output->data)
+		{
+			return;
+		}
 
 		$module_info = $output->data;
-		unset($args);
-		if (!$module_info) return; 
+		if (!$module_info)
+		{
+			return;
+		}
 
 		// check login.
 		$sender = new StdClass();
 		$sender->nick_name = $obj->nick_name;
 		$sender->email_address = $obj->email_address;
 		$logged_info = Context::get('logged_info');
-		if ($logged_info) $sender = $logged_info; 
+		if ($logged_info->member_srl)
+		{
+			$sender = $logged_info;
+		}
 
 		// get configuration info. no configuration? just return.
-		$config_list = $oModel->getConfigListByModuleSrl($obj->module_srl);
-		if (!$config_list) return; 
-
-		foreach ($config_list as $key=>$val) 
+		$config_list = $oNewpostsModel->getConfigListByModuleSrl($obj->module_srl);
+		if (!$config_list)
 		{
-			$this->processNewposts($val,$obj,$sender,$module_info);
+			return;
+		}
+
+		foreach ($config_list as $key => $val)
+		{
+			$this->processNewposts($val, $obj, $sender, $module_info);
 		}
 	}
 }

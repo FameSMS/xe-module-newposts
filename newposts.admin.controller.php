@@ -1,16 +1,17 @@
 <?php
+
 /**
  * vi:set sw=4 ts=4 noexpandtab fileencoding=utf8:
  * @class  newpostsAdminController
  * @author NURIGO (Contact@nurigo.net)
  * @brief  newpostsAdminController
  */
-class newpostsAdminController extends newposts 
+class newpostsAdminController extends newposts
 {
 	/**
 	 * @brief Constructor
 	 */
-	function init() 
+	function init()
 	{
 	}
 
@@ -18,19 +19,25 @@ class newpostsAdminController extends newposts
 	 * @brief saving config values.
 	 *
 	 **/
-	function procNewpostsAdminInsert() 
+	function procNewpostsAdminInsert()
 	{
-		$params = Context::gets('admin_phones','admin_emails', 'sender_phone', 'sender_name','sender_email','content','mail_content','module_srls','msgtype','sending_method', 'sms_method', 'time_switch', 'time_start', 'time_end', 'reserv_switch', 'selected_days', 'sender_key', 'template_code');
+		$params = Context::gets('admin_phones', 'admin_emails', 'sender_phone', 'sender_name', 'sender_email', 'content', 'mail_content', 'module_srls', 'msgtype', 'sending_method', 'sms_method', 'time_switch', 'time_start', 'time_end', 'reserv_switch', 'selected_days', 'sender_key', 'template_code');
 
 		// 모듈 입력을 하지 않앗을 경우 에러메시지 & Redirect
-		if(!$params->module_srls) return new Object(-1, 'notify_empty_module');
+		if (!$params->module_srls)
+		{
+			return $this->createObject(-1, 'notify_empty_module');
+		}
 
 		//프로세스
 		$output = $this->processNewpostsAdmin($params);
-		if(!$output->toBool()) return $output;
+		if (!$output->toBool())
+		{
+			return $output;
+		}
 
 		$this->setMessage('notify_add_newposts');
-		$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminModify','config_srl',$params->config_srl);
+		$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminModify', 'config_srl', $params->config_srl);
 		$this->setRedirectUrl($redirectUrl);
 	}
 
@@ -40,15 +47,43 @@ class newpostsAdminController extends newposts
 	 **/
 	function procNewpostsAdminModify()
 	{
-		$params = Context::gets('admin_phones','admin_emails','sender_phone','sender_name','sender_email','content','mail_content','module_srls','msgtype','sending_method', 'sms_method', 'time_switch', 'time_start', 'time_end', 'reserv_switch', 'selected_days', 'sender_key', 'template_code');
+		$params = Context::gets(
+			'admin_phones',
+			'admin_emails',
+			'sender_phone',
+			'sender_name',
+			'sender_email',
+			'content',
+			'mail_content',
+			'module_srls',
+			'msgtype',
+			'sending_method',
+			'sms_method',
+			'time_switch',
+			'time_start',
+			'time_end',
+			'reserv_switch',
+			'selected_days',
+			'sender_key',
+			'template_code',
+			'writer_content',
+			'writer_extra_key',
+			'send_to_writer'
+		);
 		$params->config_srl = Context::get('config_srl');
 		// Insert 와 다른점은 이건 Modify 로 Redirect 하고 Insert 는 Insert 로 Redirect
 		// 모듈 입력을 하지 않앗을 경우 에러메시지 & Redirect
-		if(!$params->module_srls) return new Object(-1, 'notify_emtpy_module');
+		if (!$params->module_srls)
+		{
+			return $this->createObject(-1, 'notify_emtpy_module');
+		}
 
 		//프로세스
 		$output = $this->processNewpostsAdmin($params);
-		if(!$output->toBool()) return $output;
+		if (!$output->toBool())
+		{
+			return $output;
+		}
 
 		$this->setMessage('새글알림이 수정되었습니다.');
 		$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminModify', 'config_srl', $params->config_srl);
@@ -62,24 +97,40 @@ class newpostsAdminController extends newposts
 	function processNewpostsAdmin(&$parm)
 	{
 		// 시작하는 시간은 있는데 끝나는 시간이 없는 경우
-		if($parm->time_start && !$parm->time_end) return new Object(-1, Context::getLang('notify_empty_ending_time'));
+		if ($parm->time_start && !$parm->time_end)
+		{
+			return $this->createObject(-1, Context::getLang('notify_empty_ending_time'));
+		}
 		// 시작하는 시간이 없고 끝나는 시간만 있는 경우
-		if(!$parm->time_start && $parm->time_end) return new Object(-1, Context::getLang('notify_empty_starting_time'));
+		if (!$parm->time_start && $parm->time_end)
+		{
+			return $this->createObject(-1, Context::getLang('notify_empty_starting_time'));
+		}
 
 		// 파라미터에 config_srl 있으면 지우고 다시만들고 없으면 새로 받아오고
-		if($parm->config_srl) 
+		if ($parm->config_srl)
 		{
+			$args = new stdClass();
 			$args->config_srl = $parm->config_srl;
 
 			$output = executeQuery('newposts.getConfig', $args);
-			if(!$output->toBool()) return $output;
+			if (!$output->toBool())
+			{
+				return $output;
+			}
 			$extra_vars = $output->data->extra_vars;
-			
+
 			// delete existences
 			$output = executeQuery('newposts.deleteConfig', $args);
-			if (!$output->toBool()) return $output;
+			if (!$output->toBool())
+			{
+				return $output;
+			}
 			$output = executeQuery('newposts.deleteModule', $args);
-			if (!$output->toBool()) return $output;
+			if (!$output->toBool())
+			{
+				return $output;
+			}
 		}
 		else
 		{
@@ -90,40 +141,58 @@ class newpostsAdminController extends newposts
 		$module_srls = explode(',', $parm->module_srls);
 
 		// newposts.modules 에 insert 하기
-		foreach ($module_srls as $srl) 
+		foreach ($module_srls as $srl)
 		{
-			unset($args);
+			$args = new stdClass();
 			$args->config_srl = $parm->config_srl;
 			$args->module_srl = $srl;
 			$output = executeQuery('newposts.insertModuleSrl', $args);
-			if (!$output->toBool()) return $output;
+			if (!$output->toBool())
+			{
+				return $output;
+			}
 		}
 		// newposts.config 에 insert 하기 
-		if($extra_vars) $parm->extra_vars = $extra_vars;
+		if ($extra_vars)
+		{
+			$parm->extra_vars = $extra_vars;
+		}
 
 		$output = executeQuery('newposts.insertConfig', $parm);
-		if (!$output->toBool())	return $output;
+		if (!$output->toBool())
+		{
+			return $output;
+		}
 
-		return new Object();
+		return $this->createObject();
 	}
 
 	/**
 	 * @brief delete config
 	 *
 	 **/
-	function procNewpostsAdminDelete() 
+	function procNewpostsAdminDelete()
 	{
 		$config_srl = Context::get('config_srl');
-		if (!$config_srl) return new Object(-1, 'msg_invalid_request');
+		if (!$config_srl)
+		{
+			return $this->createObject(-1, 'msg_invalid_request');
+		}
 
 		// delete existences
 		$args->config_srl = $config_srl;
 		$query_id = "newposts.deleteConfig";
 		$output = executeQuery($query_id, $args);
-		if(!$output->toBool()) return $output;
+		if (!$output->toBool())
+		{
+			return $output;
+		}
 		$query_id = "newposts.deleteModule";
 		$output = executeQuery($query_id, $args);
-		if(!$output->toBool()) return $output;
+		if (!$output->toBool())
+		{
+			return $output;
+		}
 		$redirectUrl = getNotEncodedUrl('', 'module', 'admin', 'act', 'dispNewpostsAdminList');
 		$this->setMessage('성공적으로 삭제되었습니다');
 		$this->setRedirectUrl($redirectUrl);
@@ -140,15 +209,21 @@ class newpostsAdminController extends newposts
 		$email = Context::get('email');
 		$config_srl = Context::get('config_srl');
 		$error = array();
-		if(!sizeof($cateogry_srl)) return new Object(-1, 'category_srl is empty');
+		if (!sizeof($cateogry_srl))
+		{
+			return $this->createObject(-1, 'category_srl is empty');
+		}
 
-		for($i=0; $i<sizeOf($category_srl); $i++)
+		for ($i = 0; $i < sizeOf($category_srl); $i++)
 		{
 			$args->cellphone = $cellphone[$i];
 			$args->email = $email[$i];
 			$args->category_srl = $category_srl[$i];
 			$output = executeQueryArray("newposts.updateAdminInfo", $args);
-			if(!$output->toBool()) return $output;
+			if (!$output->toBool())
+			{
+				return $output;
+			}
 		}
 
 		$this->setMessage('등록되었습니다.');

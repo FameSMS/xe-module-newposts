@@ -18,6 +18,9 @@
 	<column name="selected_days" type="varchar" size="30" />
 	<column name="sender_key" type="varchar" size="60" />
 	<column name="template_code" type="varchar" size="30" />
+	<column name="send_to_writer" type="char" size="1" />
+	<column name="writer_content" type="bigtext" />
+	<column name="writer_extra_key" type="varchar" size="50" />
 	<column name="extra_vars" type="text" />
 	<column name="regdate" type="date" notnull="notnull" index="idx_regdate" />
 </table>

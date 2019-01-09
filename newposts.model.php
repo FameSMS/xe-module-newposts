@@ -39,6 +39,7 @@ class newpostsModel extends newposts
 	function getConfigListByModuleSrl($module_srl) 
 	{
 		if (!$module_srl) return false;
+		$args = new stdClass();
 		$args->module_srl = $module_srl;
 		$output = executeQueryArray("newposts.getConfigByModuleSrl", $args);
 		if (!$output->toBool() || !$output->data) return false;

@@ -126,50 +126,49 @@
 
 			<div class="x_control-group">
 				<label class="x_control-label">{$lang->cmd_cellphone}({$lang->cmd_admin})</label>
-					<div class="x_controls">
-						<input type="text" name="admin_phones" style="width:250px;" value="{$config->admin_phones}" />
-						<a href="#admin_phones_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
-						<p id="admin_phones_help" class="x_help-block" hidden>{$lang->multiple_phone_no}</p>
-					</div>
+				<div class="x_controls">
+					<input type="text" name="admin_phones" style="width:250px;" value="{$config->admin_phones}" />
+					<a href="#admin_phones_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+					<p id="admin_phones_help" class="x_help-block" hidden>{$lang->multiple_phone_no}</p>
+				</div>
 			</div>
 
 			<div class="x_control-group">
 				<label class="x_control-label">{$lang->sender_cellphone}</label>
-					<!--div class="x_controls">
-						<input type="text" name="sender_phone" style="width:250px;" value="{$config->sender_phone}" />
-						<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
-						<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
-					</div-->
-					<div class="x_controls">
-						<select name="sender_phone">
-							<option value="">선택하세요</option>
-							<option loop="$sender_ids=>$val" value="{$val->phone_number}">{$val->phone_number}</option>
-						</select>
-						<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
-						<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
-					</div>
-			</div>			
+				<!--div class="x_controls">
+					<input type="text" name="sender_phone" style="width:250px;" value="{$config->sender_phone}" />
+					<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+					<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
+				</div-->
+				<div class="x_controls">
+					<select name="sender_phone">
+						<option value="">선택하세요</option>
+						<option loop="$sender_ids=>$val" value="{$val->phone_number}">{$val->phone_number}</option>
+					</select>
+					<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+					<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
+				</div>
+			</div>
 
 
 			<div class="x_control-group">
 				<label class="x_control-label">{$lang->content}</label>
-					<div class="x_controls">
-						<textarea rows="5" cols="8" name="content" class="pscreen" style="border:solid #eee 1px; width: 250px;">{$config->content}</textarea>
-						<div>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="content">{$lang->document_content}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="user_id">{$lang->document_userid}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="user_name">{$lang->document_username}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="nick_name">{$lang->document_nickname}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="browser_title">{$lang->browser_title}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="mid">{$lang->mid}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="article_url">{$lang->article_url}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars1">{$lang->extra_var1}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars2">{$lang->extra_var2}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars3">{$lang->extra_var3}</span></a>							
-						</div>
+				<div class="x_controls">
+					<textarea rows="5" cols="8" name="content" class="pscreen" style="border:solid #eee 1px; width: 250px;">{$config->content}</textarea>
+					<div>
+						<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="content">{$lang->document_content}</span></a>
+						<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="user_id">{$lang->document_userid}</span></a>
+						<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="user_name">{$lang->document_username}</span></a>
+						<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="nick_name">{$lang->document_nickname}</span></a>
+						<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="browser_title">{$lang->browser_title}</span></a>
+						<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="mid">{$lang->mid}</span></a>
+						<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="article_url">{$lang->article_url}</span></a>
+						<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars1">{$lang->extra_var1}</span></a>
+						<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars2">{$lang->extra_var2}</span></a>
+						<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars3">{$lang->extra_var3}</span></a>							
 					</div>
 				</div>
-
+			</div>
 			</section>
 	
 			<section class="section" style="">

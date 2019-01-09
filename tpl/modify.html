@@ -1,57 +1,61 @@
 <load target="css/phone.css" />
 <load target="css/newposts.css" />
-<load target="js/weekline/js/jquery.weekLine.min.js"/>
+<load target="js/weekline/js/jquery.weekLine.min.js" />
 <load target="js/weekline/css/cleanslate.css" />
 <load target="js/weekline/css/jquery.weekLine.css" />
 <load target="js/target.js" />
 <load target="js/newposts.js" />
 <include target="header.html" />
 
-<form action="./" class="x_form-horizontal" method="post" ruleset="modifyConfig" >
+<form action="./" class="x_form-horizontal" method="post" ruleset="modifyConfig">
 	<input type="hidden" name="module" value="newposts" />
 	<input type="hidden" name="act" value="procNewpostsAdminModify" />
-    <input type="hidden" name="config_srl" value="{$config->config_srl}" />
-    <input type="hidden" name="mail_content" value="{htmlspecialchars($config->mail_content)}" />
+	<input type="hidden" name="config_srl" value="{$config->config_srl}" />
+	<input type="hidden" name="mail_content" value="{htmlspecialchars($config->mail_content)}" />
 
 	<section class="section">
-	<h2>{$lang->general_info}</h2>
+		<h2>{$lang->general_info}</h2>
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->target_module}</label>
-				<div class="x_controls">
-						{@$id="module_srls"}
-						<input type="hidden" name="{$id}" id="{$id}" value="{$config->module_srls}" />
-						<select name="_{$id}" id="_{$id}" size="8" class="w200 fl" style="float:left; width: 265px;"></select>
-						<div class="midCommand">
-							<span><a href="{getUrl('','module','module','act','dispModuleSelectList','id',$id)}" onclick="popopen(this.href, 'ModuleSelect');return false;" class="button blue"><span>{$lang->cmd_insert}</span></a></span>
-							<span><a href="#" onclick="midMoveUp('{$id}');return false;" class="button black"><span>{$lang->cmd_move_up}</span></a></span>
-							<span><a href="#" onclick="midMoveDown('{$id}');return false;" class="button black"><span>{$lang->cmd_move_down}</span></a></span>
-							<span><a href="#" onclick="midRemove('{$id}');return false;" class="button red"><span>{$lang->cmd_delete}</span></a></span>
+			<div class="x_controls">
+				{@$id="module_srls"}
+				<input type="hidden" name="{$id}" id="{$id}" value="{$config->module_srls}" />
+				<select name="_{$id}" id="_{$id}" size="8" class="w200 fl" style="float:left; width: 265px;"></select>
+				<div class="midCommand">
+					<span><a href="{getUrl('','module','module','act','dispModuleSelectList','id',$id)}" onclick="popopen(this.href, 'ModuleSelect');return false;" class="button blue"><span>{$lang->cmd_insert}</span></a></span>
+					<span><a href="#" onclick="midMoveUp('{$id}');return false;" class="button black"><span>{$lang->cmd_move_up}</span></a></span>
+					<span><a href="#" onclick="midMoveDown('{$id}');return false;" class="button black"><span>{$lang->cmd_move_down}</span></a></span>
+					<span><a href="#" onclick="midRemove('{$id}');return false;" class="button red"><span>{$lang->cmd_delete}</span></a></span>
 
-						<script type="text/javascript">
-							if(typeof(getModuleSrlList)!=='undefined') {
-								doAddWindowLoadEventLoader( function() { getModuleSrlList('{$id}'); } );
-							}
-						</script>
-						<a href="#about_target_module_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
-						<p id="about_target_module_help" class="x_help-block" hidden>{$lang->about_target_module}</p>
-					</div>
-			</div>
-				
-			<div class="x_control-group">
-				<label class="x_control-label">{$lang->sending_method}</label>
-					<div class="x_controls">
-						<label class="x_inline" for="sending_method_1"><input type="radio" name="sending_method" id="sending_method_1" value="1" checked="checked"|cond="$config->sending_method=='1'||!$config->sending_method" />{$lang->textmessage_plus_email}</label>
-					<label class="x_inline" for="sending_method_2"><input type="radio" name="sending_method" id="sending_method_2" value="2" checked="checked"|cond="$config->sending_method=='2'" />{$lang->textmessage}</label>
-						<label class="x_inline" for="sending_method_3"><input type="radio" name="sending_method" id="sending_method_3" value="3" checked="checked"|cond="$config->sending_method=='3'" />{$lang->email}</label>
+					<script type="text/javascript">
+						if (typeof (getModuleSrlList) !== 'undefined') {
+							doAddWindowLoadEventLoader(function () {
+								getModuleSrlList('{$id}');
+							});
+						}
+					</script>
+					<a href="#about_target_module_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+					<p id="about_target_module_help" class="x_help-block" hidden>{$lang->about_target_module}</p>
 				</div>
 			</div>
-			
+
+			<div class="x_control-group">
+				<label class="x_control-label">{$lang->sending_method}</label>
+				<div class="x_controls">
+					<label class="x_inline" for="sending_method_1"><input type="radio" name="sending_method" id="sending_method_1" value="1" checked="checked"|cond="$config->sending_method=='1'||!$config->sending_method" />{$lang->textmessage_plus_email}</label>
+					<label class="x_inline" for="sending_method_2"><input type="radio" name="sending_method" id="sending_method_2" value="2" checked="checked"|cond="$config->sending_method=='2'" />{$lang->textmessage}</label>
+					<label class="x_inline" for="sending_method_3"><input type="radio" name="sending_method" id="sending_method_3" value="3" checked="checked"|cond="$config->sending_method=='3'" />{$lang->email}</label>
+				</div>
+			</div>
+
 			<div class="x_control-group">
 				<label class="x_control-label">문자방식</label>
 				<div class="x_controls">
 					<label class="x_inline" for="sms_method_3"><input type="radio" name="sms_method" id="sms_method_3" value="3" checked="checked"|cond="$config->sms_method=='3'||!$config->sms_method" />{$lang->enable_alimtalk}</label>
-					<label class="x_inline" for="sms_method_1"><input type="radio" name="sms_method" id="sms_method_1" value="1" checked="checked"|cond="$config->sms_method=='1'" />단문문자만 </label>
-					<label class="x_inline" for="sms_method_2"><input type="radio" name="sms_method" id="sms_method_2" value="2" checked="checked"|cond="$config->sms_method=='2'" />장문가능 </label>
+					<label class="x_inline" for="sms_method_1"><input type="radio" name="sms_method" id="sms_method_1" value="1" checked="checked"|cond="$config->sms_method=='1'" />단문문자만
+					</label>
+					<label class="x_inline" for="sms_method_2"><input type="radio" name="sms_method" id="sms_method_2" value="2" checked="checked"|cond="$config->sms_method=='2'" />장문가능
+					</label>
 					<a href="#sms_method_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
 					<p id="sms_method_help" class="x_help-block" hidden>{$lang->sms_method_help_message}</p>
 				</div>
@@ -63,20 +67,20 @@
 					<label class="x_inline" for="time_start">
 						<select id="time_start" name="time_start">
 							<!--@for($i = 0; $i < 24; $i++)-->
-								<option selected|cond="$config->time_start==$i" value="{sprintf('%02d', $i)}">
-									{$i % 12 ? sprintf('%02d', $i % 12) : 12 }:00 {$i >= 12 ? 'pm' : 'am'}
-								</option>
-							<!--@endfor-->	
-							<option selected|cond="!$config->time_start" value="">선택하세요. </option>
+							<option selected|cond="$config->time_start==$i" value="{sprintf('%02d', $i)}">
+								{$i % 12 ? sprintf('%02d', $i % 12) : 12 }:00 {$i >= 12 ? 'pm' : 'am'}
+							</option>
+							<!--@endfor-->
+							<option selected|cond="!$config->time_start" value="">선택하세요.</option>
 						</select>
 						-
 						<select id="time_end" name="time_end">
 							<!--@for($i = 0; $i < 24; $i++)-->
-								<option selected|cond="$config->time_end==$i" value="{sprintf('%02d', $i)}">
-									{$i % 12 ? sprintf('%02d', $i % 12) : 12 }:00 {$i >= 12 ? 'pm' : 'am'}
-								</option>
+							<option selected|cond="$config->time_end==$i" value="{sprintf('%02d', $i)}">
+								{$i % 12 ? sprintf('%02d', $i % 12) : 12 }:00 {$i >= 12 ? 'pm' : 'am'}
+							</option>
 							<!--@endfor-->
-							<option selected|cond="!$config->time_end" value="">선택하세요. </option>
+							<option selected|cond="!$config->time_end" value="">선택하세요.</option>
 						</select>
 					</label>
 					<label class="x_inline" for="time_switch">
@@ -87,11 +91,11 @@
 					</label>
 					<a href="#time_setting_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
 					<p id="time_setting_help" class="x_help-block" hidden>
-						<b>예약 발송이란?</b> 
+						<b>예약 발송이란?</b>
 						<br>
-						지정된 시간 외에 도착한 알림들은 지정한 시간이 시작하는 시간에 리포트 형식으로 예약발송으로 처리됩니다.  
+						지정된 시간 외에 도착한 알림들은 지정한 시간이 시작하는 시간에 리포트 형식으로 예약발송으로 처리됩니다.
 						<br>
-						예) 시간이 8:00am ~ 6:00pm 설정되있고, 6:00pm 이후에 온 알림이 10건이라면 다음날 아침 8시에 
+						예) 시간이 8:00am ~ 6:00pm 설정되있고, 6:00pm 이후에 온 알림이 10건이라면 다음날 아침 8시에
 						<br>
 						<b>"[새글알림]000 게시판 000 글을 포함한 총 10건의 게시글이 등록되었습니다."</b>
 						<br>
@@ -103,11 +107,11 @@
 					<label class="x_control-label">날짜설정</label>
 					<div class="x_controls">
 						<label class="x_inline" for="time_start">
-							<div id="week_cal"> </div>
+							<div id="week_cal"></div>
 							<input type="hidden" name="selected_days" id="selected_days" value="{$config->selected_days}" />
 						</label>
 					</div>
-				</div>		
+				</div>
 			</div>
 	</section>
 
@@ -134,80 +138,120 @@
 	<section class="section">
 		<h2>{$lang->title_txtmsg}</h2>
 
-			<div class="x_control-group">
-				<label class="x_control-label">{$lang->cmd_cellphone}({$lang->cmd_admin})</label>
-					<div class="x_controls">
-						<input type="text" name="admin_phones" style="width:250px;" value="{$config->admin_phones}" />
-						<a href="#admin_phones_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
-						<p id="admin_phones_help" class="x_help-block" hidden>{$lang->multiple_phone_no}</p>
-					</div>
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->cmd_cellphone}({$lang->cmd_admin})</label>
+			<div class="x_controls">
+				<input type="text" name="admin_phones" style="width:250px;" value="{$config->admin_phones}" />
+				<a href="#admin_phones_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="admin_phones_help" class="x_help-block" hidden>{$lang->multiple_phone_no}</p>
 			</div>
+		</div>
 
-			<div class="x_control-group">
-				<label class="x_control-label">{$lang->sender_cellphone}</label>
-					<!--div class="x_controls">
-						<input type="text" name="sender_phone" style="width:250px;" value="{$config->sender_phone}" />
-						<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
-						<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
-					</div-->
-					<div class="x_controls">
-						<select name="sender_phone">
-							<option name="">선택하세요</option>
-							<option loop="$sender_ids=>$val" selected|cond="$val->phone_number == $config->sender_phone" value="{$val->phone_number}">{$val->phone_number}</option>
-						</select>
-						<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
-						<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
-					</div>
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->sender_cellphone}</label>
+			<!--div class="x_controls">
+				<input type="text" name="sender_phone" style="width:250px;" value="{$config->sender_phone}" />
+				<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
+			</div-->
+			<div class="x_controls">
+				<select name="sender_phone">
+					<option name="">선택하세요</option>
+					<option loop="$sender_ids=>$val" selected|cond="$val->phone_number == $config->sender_phone" value="{$val->phone_number}">{$val->phone_number}</option>
+				</select>
+				<a href="#sender_phone_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="sender_phone_help" class="x_help-block" hidden>{$lang->sender_phone_help}</p>
 			</div>
+		</div>
 
-			<div class="x_control-group">
-				<label class="x_control-label">{$lang->content}</label>
-					<div class="x_controls">
-						<textarea rows="5" cols="8" name="content" class="pscreen" style="border:solid #eee 1px; width:250px;">{$config->content}</textarea>
-						<div>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="content">{$lang->document_content}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="user_id">{$lang->document_userid}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="user_name">{$lang->document_username}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="nick_name">{$lang->document_nickname}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="browser_title">{$lang->browser_title}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="mid">{$lang->mid}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="article_url">{$lang->article_url}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars1">{$lang->extra_var1}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars2">{$lang->extra_var2}</span></a>
-							<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars3">{$lang->extra_var3}</span></a>
-						</div>
-					</div>
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->content}</label>
+			<div class="x_controls">
+				<textarea rows="5" cols="8" name="content" class="pscreen" style="border:solid #eee 1px; width:250px;">{$config->content}</textarea>
+				<div>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="content">{$lang->document_content}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="user_id">{$lang->document_userid}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="user_name">{$lang->document_username}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="nick_name">{$lang->document_nickname}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="browser_title">{$lang->browser_title}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="mid">{$lang->mid}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="article_url">{$lang->article_url}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars1">{$lang->extra_var1}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars2">{$lang->extra_var2}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVar" var="extra_vars3">{$lang->extra_var3}</span></a>
 				</div>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label" for="send_to_writer">글 작성자에게 메세지 전송하기</label>
+			<div class="x_controls">
+				<select name="send_to_writer" id="send_to_writer">
+					<option value="N" selected="selected"|cond="$config->send_to_writer != 'Y'">{$lang->notuse}</option>
+					<option value="Y" selected="selected"|cond="$config->send_to_writer == 'Y'">{$lang->use}</option>
+				</select>
+				<p class="x_help-block">글 작성자에게 메세지 전송하는 옵션입니다.</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label" for="writer_extra_key">회원전화번호 변수</label>
+			<div class="x_controls">
+				<select name="writer_extra_key" id="writer_extra_key">
+					<option value="0">{$lang->notuse}</option>
+					<option loop="$variable_name => $val" value="{$val}" selected="selected"|cond="$config->writer_extra_key == $val">{$val}</option>
+				</select>
+				<p class="x_help-block">회원전화번호 변수를 선택합니다. 회원전화번호 변수가 1개일 경우 설치시 자동으로 설정이 저장됩니다. 이 경우 설정을 할 필요가 없어서 설정을 선택할 수 없습니다.</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label">작성자에게 전송할 {$lang->content}</label>
+			<div class="x_controls">
+				<textarea rows="5" cols="8" name="writer_content" class="pscreenWrite" style="border:solid #eee 1px; width: 250px;">{$config->writer_content}</textarea>
+				<div>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVars" var="content">{$lang->document_content}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVars" var="user_id">{$lang->document_userid}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVars" var="user_name">{$lang->document_username}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVars" var="nick_name">{$lang->document_nickname}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVars" var="browser_title">{$lang->browser_title}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVars" var="mid">{$lang->mid}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVars" var="article_url">{$lang->article_url}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVars" var="extra_vars1">{$lang->extra_var1}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVars" var="extra_vars2">{$lang->extra_var2}</span></a>
+					<a class="btn" style="width:10%; overflow:hidden;"><span class="notiReplaceVars" var="extra_vars3">{$lang->extra_var3}</span></a>
+				</div>
+			</div>
+		</div>
 	</section>
-		
+
 	<section class="section">
 		<h2>{$lang->title_email}</h2>
-			<div class="x_control-group">
-				<label class="x_control-label">{$lang->email_address}({$lang->cmd_admin})</label>
-						<div class="x_controls">
-							<input type="text" name="admin_emails" style="width:300px;" value="{$config->admin_emails}" />
-							<a href="#admin_emails_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
-							<p id="admin_emails_help" class="x_help-block" hidden>{$lang->multiple_email}</p>
-						</div>
-				</div>
-			<div class="x_control-group">
-				<label class="x_control-label">{$lang->sender_info}</label>
-						<div class="x_controls">
-							{$lang->cmd_name} : <input type="text" name="sender_name" style="width:100px;" value="{$config->sender_name}" />
-							{$lang->mail_content} : <input type="text" name="sender_email" style="width:240px;" value="{$config->sender_email}" />
-							<a href="#config_sender_email_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
-							<p id="config_sender_email_help" class="x_help-block" hidden>{$lang->help_sender_email}</p>
-						</div>
-				</div>
-			<div class="x_control-group">
-					<label class="x_control-label">{$lang->mail_content}</label>	
-						<div class="x_controls">
-							<a href="#mail_content_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
-							<p id="mail_content_help" class="x_help-block" hidden>{$lang->help_mail_content}</p>
-							<div>{$editor}</div>
-						</div>
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->email_address}({$lang->cmd_admin})</label>
+			<div class="x_controls">
+				<input type="text" name="admin_emails" style="width:300px;" value="{$config->admin_emails}" />
+				<a href="#admin_emails_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="admin_emails_help" class="x_help-block" hidden>{$lang->multiple_email}</p>
 			</div>
-	</section>	
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->sender_info}</label>
+			<div class="x_controls">
+				{$lang->cmd_name} :
+				<input type="text" name="sender_name" style="width:100px;" value="{$config->sender_name}" />
+				{$lang->mail_content} :
+				<input type="text" name="sender_email" style="width:240px;" value="{$config->sender_email}" />
+				<a href="#config_sender_email_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="config_sender_email_help" class="x_help-block" hidden>{$lang->help_sender_email}</p>
+			</div>
+		</div>
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->mail_content}</label>
+			<div class="x_controls">
+				<a href="#mail_content_help" class="x_icon-question-sign" data-toggle>{$lang->help}</a>
+				<p id="mail_content_help" class="x_help-block" hidden>{$lang->help_mail_content}</p>
+				<div>{$editor}</div>
+			</div>
+		</div>
+	</section>
 
 	<div class="btnArea">
 		<input type="submit" class="x_btn x_btn-primary" value="{$lang->cmd_modify}" accesskey="s" />
