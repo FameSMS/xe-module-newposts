@@ -148,7 +148,7 @@ class newpostsController extends newposts
 			
 			if($config->send_to_writer == 'Y')
 			{
-				$args->recipient_no = $sender->phone[0].$sender->phone[1].$sender->phone[2];
+				$args->recipient_no = $sender->{$config->writer_extra_key}[0].$sender->{$config->writer_extra_key}[1].$sender->{$config->writer_extra_key}[2];
 				$args->content = $writer_sms_message;
 				$result = $oTextmessageController->sendMessage($args);
 				if (!$result->toBool()) return $output;
